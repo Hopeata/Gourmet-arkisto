@@ -11,7 +11,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
+    <body>        
         <h1>Hello World!</h1>
+        <div>${title}</div>
+        <div>${nimilista}</div>
     </body>
 </html>
