@@ -20,10 +20,11 @@
                 <img src="kuvat/ruoka.jpg" alt="Ruokakuva"width="150" height="100">
                 <img src="kuvat/toinenruoka.jpg" alt="Ruokakuva"width="150" height="100">
                 <img src="kuvat/kolmasruoka.jpg" alt="Ruokakuva"width="150" height="100">
+                <img src="kuvat/kolmasruokakuva.jpg" alt="Ruokakuva"width="100" height="100">
                 <img src="kuvat/neljasruoka.jpg" alt="Ruokakuva"width="150" height="100">
                 <img src="kuvat/viidesruoka.jpg" alt="Ruokakuva"width="150" height="100">
                 <img src="kuvat/kuudesruoka.jpg" alt="Ruokakuva"width="150" height="100">
-                <img src="kuvat/seitsemasruoka.jpg" alt="Ruokakuva"width="150" height="100">
+                <img src="kuvat/tokaruokakuva.jpg" alt="Ruokakuva"width="100" height="100">
                 <img src="kuvat/kahdeksasruoka.jpg" alt="Ruokakuva"width="150" height="100">
             </div>
         </div>
@@ -33,7 +34,7 @@
                 <li><a href="kirjautumisnakyma.jsp"><span class="glyphicon glyphicon-log-out"></span> Kirjaudu ulos </a></li>
             </ul>
             <li class="active"><a href="#">Pääsivu</a></li>
-            <li><a href="#">Ehdota reseptiä</a></li>
+            <li><a href="reseptinlisaysnakyma.jsp">Ehdota reseptiä</a></li>
             <li><a href="#">Omat tiedot</a></li>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
@@ -61,23 +62,23 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Banaanikana intialaisittain</td>
-                        <td>Pääruoka</td>
-                        <td>Kana</td>
-                        <td>16.08.13</td>
-                    </tr>
-                    <tr>
-                        <td>Taivaallinen mangosorbetti</td>
-                        <td>Jälkiruoka</td>
-                        <td>Mango</td>
-                        <td>17.07.13</td>
-                    </tr>
-                    <tr>
-                        <td>Täydelliset mozzarellaleivät</td>
-                        <td>Välipala</td>
-                        <td>Juusto</td>
-                        <td>16.07.13</td>
-                    </tr>
+                        <td><a href="reseptinakyma.jsp">Banaanikana intialaisittain</a></td>
+                    <td>Pääruoka</td>
+                    <td>Kana</td>
+                    <td>16.08.13</td>
+                </tr>
+                <tr>
+                    <td>Taivaallinen mangosorbetti</td>
+                    <td>Jälkiruoka</td>
+                    <td>Mango</td>
+                    <td>17.07.13</td>
+                </tr>
+                <tr>
+                    <td>Täydelliset mozzarellaleivät</td>
+                    <td>Välipala</td>
+                    <td>Juusto</td>
+                    <td>16.07.13</td>
+                </tr>
                 </tbody>
             </table>
         </div>

@@ -15,7 +15,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <div class="container">
+        <div class="jumbotron">
             <h1>Kirjaudu Gourmet-arkistoon</h1>
             <form class="form-horizontal" role="form" action="paanakyma.jsp" method="POST">
                 <div class="form-group">
