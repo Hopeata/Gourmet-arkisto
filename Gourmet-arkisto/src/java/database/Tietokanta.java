@@ -31,7 +31,7 @@ public class Tietokanta {
             yhteys = yhteysVarasto.getConnection();
 
             //Suoritetaan sql-kysely. Haetaan täysi-ikäiset Lehtoset tietokannasta
-            String sql = "SELECT name FROM TestTable";
+            String sql = "SELECT nimi FROM ruokalaji";
             kysely = yhteys.prepareStatement(sql);
             tulokset = kysely.executeQuery();
 
