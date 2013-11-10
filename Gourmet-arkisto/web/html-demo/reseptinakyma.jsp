@@ -33,7 +33,7 @@
                 <li><a href="kirjautumisnakyma.jsp"><span class="glyphicon glyphicon-log-out"></span> Kirjaudu ulos </a></li>
             </ul>
             <li><a href="paanakyma.jsp">Pääsivu</a></li>
-            <li class="active"><a href="#">Ehdota reseptiä</a></li>
+            <li><a href="#">Ehdota reseptiä</a></li>
             <li><a href="#">Omat tiedot</a></li>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">

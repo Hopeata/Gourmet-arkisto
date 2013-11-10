@@ -42,7 +42,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <button type="submit" class="btn btn-default">Kirjaudu sisään</button>
-                        <button type="submit" class="btn btn-default">Luo uusi käyttäjätili</button>
+                        <a class="btn btn-default" href="tilinlisaysnakyma.jsp" role="button">Luo käyttäjätili</a>
                     </div>
                 </div>
             </form>

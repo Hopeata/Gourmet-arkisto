@@ -38,7 +38,7 @@ public class Tietokanta {
             //Tulostetaan tietoja löydetyistä käyttäjistä
             List<String> nimet = new ArrayList<String>();
             while (tulokset.next()) {
-                String nimi = tulokset.getString("name");
+                String nimi = tulokset.getString("nimi");
                 nimet.add(nimi);
                 // System.out.println("Käyttäjän " + nimi);
             }

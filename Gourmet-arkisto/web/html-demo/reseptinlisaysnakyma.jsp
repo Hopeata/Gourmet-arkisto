@@ -34,7 +34,7 @@
             </ul>
             <li><a href="paanakyma.jsp">Pääsivu</a></li>
             <li class="active"><a href="#">Ehdota reseptiä</a></li>
-            <li><a href="#">Omat tiedot</a></li>
+            <li><a href="tilinmuokkausnakyma.jsp">Omat tiedot</a></li>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search">
