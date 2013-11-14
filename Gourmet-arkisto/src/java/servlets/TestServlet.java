@@ -23,7 +23,7 @@ public class TestServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setAttribute("title", "Hello world title!");
-        try {
+ /*       try {
             List<String> nimet = Tietokanta.teeAsioitaKannalla();
             StringBuffer nimilista = new StringBuffer();
             for (String nimi : nimet) {
@@ -36,6 +36,6 @@ public class TestServlet extends HttpServlet {
                 
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
-    }
+*/    }
 
 }
