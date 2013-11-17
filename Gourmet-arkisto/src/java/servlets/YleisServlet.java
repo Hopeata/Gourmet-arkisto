@@ -13,6 +13,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import models.Kayttaja;
+import org.apache.catalina.Session;
 
 /**
  *
@@ -20,13 +23,52 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class YleisServlet extends HttpServlet {
 
-    public static void avaaSivu(String sivu, HttpServletRequest request, HttpServletResponse response) {
-        RequestDispatcher dispatcher = request.getRequestDispatcher(sivu);
+    public static void avaaSivu(String osoite, HttpServletRequest request, HttpServletResponse response) {
         try {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(osoite);
             dispatcher.forward(request, response);
         } catch (Exception ex) {
             Logger.getLogger(YleisServlet.class.getName()).log(Level.SEVERE, null, ex);
-            throw new GourmetException("Sivun " + sivu + " avaaminen epäonnistui: " + ex.getMessage());
+            throw new GourmetException("Sivun " + osoite + " avaaminen epäonnistui: " + ex.getMessage());
         }
+    }
+
+    public static void siirrySivulle(String osoite, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.sendRedirect(request.getContextPath() + osoite);
+        } catch (Exception ex) {
+            Logger.getLogger(YleisServlet.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Sivulle " + osoite + " siirtyminen epäonnistui: " + ex.getMessage());
+        }
+    }
+
+    public static void lisaaVirheViesti(HttpServletRequest request, String viesti) {
+        HttpSession session = request.getSession(false);
+        session.setAttribute("virheViesti", viesti);
+    }
+
+    public static void poistVirheViesti(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        session.removeAttribute("virheViesti");
+    }
+
+    public static boolean onKirjautunut(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        if (session.getAttribute("kirjautunut") != null) {
+            return true;
+        } else {
+            request.setAttribute("virheViesti", "Et ole kirjautunut");
+            avaaSivu("/WEB-INF/jsp/kayttajanakymat/kirjautuminen.jsp", request, response);
+            return false;
+        }
+    }
+
+    public static boolean onAdminOikeudet(HttpSession session) {
+        Kayttaja kayttaja = (Kayttaja) session.getAttribute("kirjautunut");
+        return kayttaja.isAdminOikeudet();
+    }
+
+    public static boolean onVipOikeudet(HttpSession session) {
+        Kayttaja kayttaja = (Kayttaja) session.getAttribute("kirjautunut");
+        return kayttaja.isVipOikeudet();
     }
 }

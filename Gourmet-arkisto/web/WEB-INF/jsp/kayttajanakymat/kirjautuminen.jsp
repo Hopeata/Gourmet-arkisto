@@ -20,6 +20,7 @@
             <h1>Kirjaudu Gourmet-arkistoon</h1>
             <c:if test="${virheViesti != null}">
                 <div class="alert alert-danger">${virheViesti}</div>
+                <c:remove var="virheViesti" scope="session"/>
             </c:if>
             <form class="form-horizontal" role="form" action="kirjautuminen" method="POST">
                 <input name="action" type="hidden" id="action" value="login">
