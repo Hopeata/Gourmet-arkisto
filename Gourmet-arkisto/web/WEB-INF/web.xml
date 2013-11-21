@@ -8,6 +8,10 @@
         <filter-name>KirjautumisFilter</filter-name>
         <url-pattern>/arkisto/*</url-pattern>
     </filter-mapping>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type >
+        <location>/vikatila</location>
+    </error-page>
     <servlet>
         <servlet-name>TestServlet</servlet-name>
         <servlet-class>servlets.TestServlet</servlet-class>
@@ -28,6 +32,10 @@
         <servlet-name>KayttajanLisays</servlet-name>
         <servlet-class>servlets.KayttajanLisaysServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VikatilaServlet</servlet-name>
+        <servlet-class>servlets.VikatilaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -47,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>KayttajanLisays</servlet-name>
         <url-pattern>/kayttajanlisays</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VikatilaServlet</servlet-name>
+        <url-pattern>/vikatila</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
