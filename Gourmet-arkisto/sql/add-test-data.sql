@@ -1,5 +1,7 @@
+
+-- admin-käyttäjätunnuksen lisäys, tunnus admin, salasana admin
 INSERT INTO kayttaja(tunnus, sahkoposti, salasana, admin_oikeudet, vip_oikeudet)
-    VALUES ('admin', null, 'admin', true, true);
+    VALUES ('admin', null, 'D033E22AE348AEB5660FC2140AEC35850C4DA997', true, true);
 
 INSERT INTO ruokalaji(nimi) VALUES ('alkupala');
 
@@ -29,4 +31,6 @@ INSERT INTO paaraaka_aine(nimi) VALUES ('kala');
 INSERT INTO paaraaka_aine(nimi) VALUES ('liha');
 
 INSERT INTO paaraaka_aine(nimi) VALUES ('kasvis');
+
+INSERT INTO paaraaka_aine(nimi) VALUES ('merenelävä');
 

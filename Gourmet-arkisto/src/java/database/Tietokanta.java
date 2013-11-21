@@ -1,5 +1,6 @@
 package database;
 
+import exceptions.GourmetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -19,14 +20,28 @@ public class Tietokanta {
             yhteysVarasto = (DataSource) ctx.lookup("java:/comp/env/jdbc/tietokanta");
         } catch (NamingException ex) {
             Logger.getLogger(Tietokanta.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Kannan avaus epäonnistui: " + ex.getMessage());
         }
     }
 
-    public static Connection avaaYhteys() throws SQLException {
-        return yhteysVarasto.getConnection();
+    public static Connection avaaYhteys() {
+        try {
+            return yhteysVarasto.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(Tietokanta.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Yhteyden avaaminen epäonnistui: " + ex.getMessage());
+        }
     }
 
-    public static void suljeYhteys(Connection yhteys) throws SQLException {
-        yhteys.close();
+    public static void suljeYhteys(Connection yhteys) {
+        if (yhteys != null) {
+            try {
+                yhteys.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Tietokanta.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GourmetException("Yhteyden sulkeminen epäonnistui: " + ex.getMessage());
+
+            }
+        }
     }
 }

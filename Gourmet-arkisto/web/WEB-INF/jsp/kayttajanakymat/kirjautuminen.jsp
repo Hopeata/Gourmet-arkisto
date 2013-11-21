@@ -22,7 +22,7 @@
                 <div class="alert alert-danger">${virheViesti}</div>
                 <c:remove var="virheViesti" scope="session"/>
             </c:if>
-            <form class="form-horizontal" role="form" action="kirjautuminen" method="POST">
+            <form class="form-horizontal" role="form" action="" method="POST">
                 <input name="action" type="hidden" id="action" value="login">
                 <div class="form-group">
                     <label for="inputText" class="col-md-2 control-label">Tunnus</label>
@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <button type="submit" class="btn btn-default">Kirjaudu sisään</button>
-                        <a class="btn btn-default" href="tilinlisaysnakyma.jsp" role="button">Luo käyttäjätili</a>
+                        <a class="btn btn-default" href="${pageContext.request.contextPath}/kayttajanlisays" role="button">Luo käyttäjätili</a>
                     </div>
                 </div>
             </form>

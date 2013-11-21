@@ -20,6 +20,14 @@
         <servlet-name>Reseptilistaus</servlet-name>
         <servlet-class>servlets.ReseptiListausServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReseptinLisays</servlet-name>
+        <servlet-class>servlets.ReseptinLisaysServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KayttajanLisays</servlet-name>
+        <servlet-class>servlets.KayttajanLisaysServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -31,6 +39,14 @@
     <servlet-mapping>
         <servlet-name>Reseptilistaus</servlet-name>
         <url-pattern>/arkisto/reseptilistaus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReseptinLisays</servlet-name>
+        <url-pattern>/arkisto/reseptinlisays</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KayttajanLisays</servlet-name>
+        <url-pattern>/kayttajanlisays</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
