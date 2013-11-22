@@ -45,6 +45,7 @@
                            </c:otherwise>
                        </c:choose>
             --%>           <li><a href="tilinmuokkausnakyma.jsp">Omat tiedot</a></li>
+            <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus?action=kayttajat">Käyttäjät</a></li>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search">

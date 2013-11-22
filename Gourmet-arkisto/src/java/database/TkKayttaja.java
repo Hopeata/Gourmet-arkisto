@@ -60,6 +60,18 @@ public class TkKayttaja {
         return kirjautunutKayttaja;
     }
 
+    public static List<Kayttaja> haeKayttajat() {
+        try {
+            Connection yhteys = Tietokanta.avaaYhteys();
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_KAYTTAJAT);
+            List<Kayttaja> kayttajat = muunnaKayttajaOlioiksi(kysely.executeQuery());
+            return kayttajat;
+        } catch (Exception ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Käyttäjien haku epäonnistui: " + ex.getMessage());
+        }
+    }
+
     public static boolean tunnusOlemassa(String tunnus) {
         Connection yhteys = Tietokanta.avaaYhteys();
         try {
