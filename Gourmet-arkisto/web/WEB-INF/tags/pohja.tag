@@ -37,7 +37,7 @@
             </ul>
             <li class="active"><a href="#">Pääsivu</a></li>
             <%--          <c:choose>
-                           <c:when test="${vip-oikeudet}">
+                           <c:when test="${kayttaja.vipOikeudet}">
             --%>                 <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays?action=lisays">Lisää resepti</a></li>
             <%--               </c:when>
                            <c:otherwise>
@@ -45,7 +45,7 @@
                            </c:otherwise>
                        </c:choose>
             --%>           <li><a href="tilinmuokkausnakyma.jsp">Omat tiedot</a></li>
-            <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus?action=kayttajat">Käyttäjät</a></li>
+            <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search">

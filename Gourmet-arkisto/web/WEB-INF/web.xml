@@ -58,7 +58,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>KayttajanLisays</servlet-name>
-        <url-pattern>/arkisto/kayttajanlisays</url-pattern>
+        <url-pattern>/kayttajanlisays</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>VikatilaServlet</servlet-name>

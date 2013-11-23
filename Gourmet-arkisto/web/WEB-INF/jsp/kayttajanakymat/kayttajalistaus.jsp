@@ -18,7 +18,7 @@
                         <th>Tunnus</th>
                         <th>Sähköposti</th>
                         <th>Vip-oikeudet</th>
-                        <th></th>
+                        <th>Käyttäjän poisto</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,9 +26,22 @@
                         <tr>
                             <td><c:out value="${kayttaja.tunnus}"/></td>
                             <td><c:out value="${kayttaja.sahkoposti}"/></td>
-  <%--                          <td><c:out value="${kayttaja.vipoikeudet}"/></td>
-                            <td></td>
-  --%>                  </tr>
+                            <c:choose>
+                                <c:when test="${kayttaja.vipOikeudet}">
+                                    <td><form name="frm" method="post" action="">
+                                            <input name="vippoistoaction" type="hidden" id="vippoistoaction" value="${kayttaja.id}">
+                                            <button type="submit" class="btn btn-default">Poista oikeudet</button>                                         </form></td>                                
+                                        </c:when>
+                                        <c:otherwise>
+                                    <td><form name="frm" method="post" action="">
+                                            <input name="viplisaysaction" type="hidden" id="viplisaysaction" value="${kayttaja.id}">
+                                            <button type="submit" class="btn btn-default">Anna oikeudet</button>                                         </form></td>
+                                        </c:otherwise>
+                                    </c:choose>
+<td><form name="frm" method="post" action="">
+                                            <input name="kayttajapoistoaction" type="hidden" id="kayttajapoistoaction" value="${kayttaja.id}">
+                                            <button type="submit" class="btn btn-default">Poista käyttäjä</button>                                         </form></td>
+                        </tr>
                     </c:forEach>
                 </tbody>
             </table>

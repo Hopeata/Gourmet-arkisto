@@ -29,6 +29,8 @@ public class TkKayttaja {
     private static final String HAE_TUNNUKSELLA = "SELECT id FROM kayttaja WHERE tunnus = ?";
     private static final String LISAA_KAYTTAJA = "INSERT INTO kayttaja (tunnus, sahkoposti, "
             + "salasana, admin_oikeudet, vip_oikeudet) VALUES (?, ?, ?, ?, ?)";
+    private static final String POISTA_KAYTTAJA = "DELETE FROM kayttaja WHERE id = ?";
+    private static final String PAIVITA_VIP = "UPDATE kayttaja SET vip_oikeudet = ? WHERE id = ?";
 
     private static List<Kayttaja> muunnaKayttajaOlioiksi(ResultSet rs) throws SQLException {
         List<Kayttaja> kayttajat = new ArrayList<Kayttaja>();
@@ -97,6 +99,35 @@ public class TkKayttaja {
             lisayslause.setBoolean(4, false);
             lisayslause.setBoolean(5, false);
             lisayslause.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+        }
+    }
+
+    public static void paivitaVipOikeudet(int id, boolean vipOikeus) {
+        try {
+            Connection yhteys = Tietokanta.avaaYhteys();
+            PreparedStatement paivityslause = yhteys.prepareStatement(PAIVITA_VIP);
+            if (vipOikeus) {
+                paivityslause.setBoolean(1, false);
+            } else {
+                paivityslause.setBoolean(1, true);
+            }
+            paivityslause.setInt(2, id);
+            paivityslause.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+        }
+    }
+
+    public static void poistaKayttaja(int id) {
+        try {
+            Connection yhteys = Tietokanta.avaaYhteys();
+            PreparedStatement poistolause = yhteys.prepareStatement(POISTA_KAYTTAJA);
+            poistolause.setInt(1, id);
+            poistolause.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException("Käyttäjän lisäys epäonnistui: " + ex.getMessage());

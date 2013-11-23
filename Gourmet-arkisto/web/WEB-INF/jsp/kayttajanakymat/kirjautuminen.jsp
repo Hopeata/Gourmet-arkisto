@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">Kirjaudu sisään</button>
+                        <button type="submit" class="btn btn-default">Kirjaudu sisään</button>                        
                         <a class="btn btn-default" href="${pageContext.request.contextPath}/kayttajanlisays" role="button">Luo käyttäjätili</a>
                     </div>
                 </div>
