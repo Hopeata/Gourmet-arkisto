@@ -15,7 +15,8 @@
             <form class="navbar-form navbar-left" role="search">
                 <input name="etsintaaction" type="hidden" id="action" value="search">
                 <div class="form-group">
-                    <input type="text" name="haku" class="form-control" id="haku" placeholder="Search">
+                    <input type="text" name="haku" class="form-control" id="haku" value="${hakusana}" placeholder="Search">
+                    <c:remove var="hakusana" scope="session"/>                        
                 </div>
                 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Hae käyttäjää</button>
             </form>
@@ -38,7 +39,7 @@
                         <c:forEach var="kayttaja" items="${kayttajat}">
                             <tr>
                                 <td><c:out value="${kayttaja.tunnus}"/></td>
-                                <td><c:out value="${kayttaja.sahkoposti}"/></td>
+                                <td><a href="mailto:<c:out value="${kayttaja.sahkoposti}"/>"><c:out value="${kayttaja.sahkoposti}"/></a></td>
                                 <c:choose>
                                     <c:when test="${kayttaja.vipOikeudet}">
                                         <td><form name="frm" method="post" action="">

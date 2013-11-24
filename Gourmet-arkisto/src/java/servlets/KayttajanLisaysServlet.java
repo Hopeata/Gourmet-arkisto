@@ -61,11 +61,13 @@ public class KayttajanLisaysServlet extends YleisServlet {
             lisaaSessioon(req, "tunnus", tunnus);
             lisaaSessioon(req, "sahkoposti", sahkoposti);
             siirrySivulle("/kayttajanlisays", req, resp);
+        } else {
+
+            Kayttaja uusiKayttaja = new Kayttaja(-1, tunnus, sahkoposti, false, false);
+            TkKayttaja.lisaaKayttaja(uusiKayttaja, salasana);
+            lisaaVirheViesti(req, "Käyttäjätilisi on aktivoitu!");
+            siirrySivulle("/kirjautuminen", req, resp);
         }
 
-        Kayttaja uusiKayttaja = new Kayttaja(-1, tunnus, sahkoposti, false, false);
-        TkKayttaja.lisaaKayttaja(uusiKayttaja, salasana);
-        lisaaVirheViesti(req, "Käyttäjätilisi on aktivoitu!");
-        siirrySivulle("/kirjautuminen", req, resp);
     }
 }

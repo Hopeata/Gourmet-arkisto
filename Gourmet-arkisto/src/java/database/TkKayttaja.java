@@ -24,11 +24,11 @@ public class TkKayttaja {
 
     private static final String HAE_KAYTTAJAT =
             "SELECT id, tunnus, sahkoposti, admin_oikeudet, vip_oikeudet FROM kayttaja";
+    private static final String JARJESTA_TUNNUKSEN_MUKAAN = " ORDER BY tunnus";
     private static final String HAE_TUNNUKSELLA_JA_SALASANALLA = HAE_KAYTTAJAT
             + " WHERE tunnus = ? AND salasana = ?";
     private static final String HAE_TUNNUKSELLA = "SELECT id FROM kayttaja WHERE tunnus = ?";
-    private static final String HAE_KAYTTAJA_TUNNUKSELLA = HAE_KAYTTAJAT + " WHERE tunnus = ?";
-    private static final String HAE_SAHKOPOSTILLA = HAE_KAYTTAJAT + " WHERE sahkoposti = ?";
+    private static final String HAE_TUNNUKSELLA_TAI_SAHKOPOSTILLA = HAE_KAYTTAJAT + " WHERE tunnus LIKE ? OR sahkoposti LIKE ?";
     private static final String LISAA_KAYTTAJA = "INSERT INTO kayttaja (tunnus, sahkoposti, "
             + "salasana, admin_oikeudet, vip_oikeudet) VALUES (?, ?, ?, ?, ?)";
     private static final String POISTA_KAYTTAJA = "DELETE FROM kayttaja WHERE id = ?";
@@ -69,7 +69,7 @@ public class TkKayttaja {
     public static List<Kayttaja> haeKayttajat() {
         try {
             Connection yhteys = Tietokanta.avaaYhteys();
-            PreparedStatement kysely = yhteys.prepareStatement(HAE_KAYTTAJAT);
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_KAYTTAJAT + JARJESTA_TUNNUKSEN_MUKAAN);
             List<Kayttaja> kayttajat = muunnaKayttajaOlioiksi(kysely.executeQuery());
             return kayttajat;
         } catch (Exception ex) {
@@ -97,14 +97,10 @@ public class TkKayttaja {
         Connection yhteys = Tietokanta.avaaYhteys();
         ResultSet rs = null;
         try {
-            PreparedStatement kysely = yhteys.prepareStatement(HAE_KAYTTAJA_TUNNUKSELLA);
-            kysely.setString(1, haku);
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_TUNNUKSELLA_TAI_SAHKOPOSTILLA + JARJESTA_TUNNUKSEN_MUKAAN);
+            kysely.setString(1, "%" + haku + "%");
+            kysely.setString(2, "%" + haku + "%");
             rs = kysely.executeQuery();
-            if (!rs.isBeforeFirst()) {
-                kysely = yhteys.prepareStatement(HAE_SAHKOPOSTILLA);
-                kysely.setString(1, haku);
-                rs = kysely.executeQuery();
-            }
             List<Kayttaja> kayttajat = muunnaKayttajaOlioiksi(rs);
             return kayttajat;
         } catch (SQLException ex) {

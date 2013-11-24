@@ -26,7 +26,9 @@ public class KayttajalistausServlet extends YleisServlet {
         String kayttajapoistoaction = req.getParameter("kayttajapoistoaction");
         List<Kayttaja> kayttajat = null;
         if (etsintaaction != null) {
-            kayttajat = TkKayttaja.haeKayttajaa(req.getParameter("haku"));
+            String hakusana = req.getParameter("haku");
+            kayttajat = TkKayttaja.haeKayttajaa(hakusana);
+            lisaaSessioon(req, "hakusana", hakusana);
         } else {
             kayttajat = TkKayttaja.haeKayttajat();
         }
