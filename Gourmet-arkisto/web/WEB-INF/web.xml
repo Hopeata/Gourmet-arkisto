@@ -40,6 +40,14 @@
         <servlet-name>Kayttajalistaus</servlet-name>
         <servlet-class>servlets.KayttajalistausServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>KayttajanTiedot</servlet-name>
+        <servlet-class>servlets.KayttajanTiedotServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KayttajanTietojenMuokkaus</servlet-name>
+        <servlet-class>servlets.KayttajanTietojenMuokkausServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -67,6 +75,14 @@
     <servlet-mapping>
         <servlet-name>Kayttajalistaus</servlet-name>
         <url-pattern>/arkisto/kayttajalistaus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KayttajanTiedot</servlet-name>
+        <url-pattern>/arkisto/kayttajantiedot</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KayttajanTietojenMuokkaus</servlet-name>
+        <url-pattern>/arkisto/tietojenmuokkaus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

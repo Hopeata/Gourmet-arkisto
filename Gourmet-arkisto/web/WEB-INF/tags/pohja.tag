@@ -35,7 +35,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="${pageContext.request.contextPath}/kirjautuminen?action=logout"><span class="glyphicon glyphicon-log-out"></span> Kirjaudu ulos </a></li>
             </ul>
-            <li class="active"><a href="#">Pääsivu</a></li>
+            <li><a href="#">Pääsivu</a></li>
             <%--          <c:choose>
                            <c:when test="${kayttaja.vipOikeudet}">
             --%>                 <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays?action=lisays">Lisää resepti</a></li>
@@ -44,7 +44,7 @@
                                <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays?action=ehdotus">Ehdota reseptiä</a></li>       
                            </c:otherwise>
                        </c:choose>
-            --%>           <li><a href="tilinmuokkausnakyma.jsp">Omat tiedot</a></li>
+            --%>           <li><a href="${pageContext.request.contextPath}/arkisto/kayttajantiedot">Omat tiedot</a></li>
             <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">

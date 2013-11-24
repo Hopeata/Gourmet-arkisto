@@ -31,6 +31,8 @@ public class TkKayttaja {
             + "salasana, admin_oikeudet, vip_oikeudet) VALUES (?, ?, ?, ?, ?)";
     private static final String POISTA_KAYTTAJA = "DELETE FROM kayttaja WHERE id = ?";
     private static final String PAIVITA_VIP = "UPDATE kayttaja SET vip_oikeudet = ? WHERE id = ?";
+    private static final String PAIVITA_TIEDOT = "UPDATE kayttaja SET tunnus = ?, sahkoposti = ? WHERE id = ?";
+    private static final String PAIVITA_SALASANA = "UPDATE kayttaja SET salasana = ? WHERE id = ?";
 
     private static List<Kayttaja> muunnaKayttajaOlioiksi(ResultSet rs) throws SQLException {
         List<Kayttaja> kayttajat = new ArrayList<Kayttaja>();
@@ -105,6 +107,28 @@ public class TkKayttaja {
         }
     }
 
+    public static void paivitaKayttajaTiedot(Kayttaja kayttaja, String salasana) {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            PreparedStatement muokkauslause = yhteys.prepareStatement(PAIVITA_TIEDOT);
+            muokkauslause.setString(1, kayttaja.getTunnus());
+            muokkauslause.setString(2, kayttaja.getSahkoposti());
+            muokkauslause.setInt(3, kayttaja.getId());
+            muokkauslause.executeUpdate();
+            if (salasana != null && !salasana.equals("")) {
+                muokkauslause = yhteys.prepareStatement(PAIVITA_SALASANA);
+                muokkauslause.setString(1, SalausUtility.salaaSalasana(salasana));
+                muokkauslause.setInt(2, kayttaja.getId());
+                muokkauslause.executeUpdate();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Käyttäjätietojen muokkaus epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
     public static void paivitaVipOikeudet(int id, boolean vipOikeus) {
         try {
             Connection yhteys = Tietokanta.avaaYhteys();
@@ -116,9 +140,13 @@ public class TkKayttaja {
             }
             paivityslause.setInt(2, id);
             paivityslause.executeUpdate();
+
+
         } catch (Exception ex) {
-            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
-            throw new GourmetException("Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+            Logger.getLogger(TkKayttaja.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException(
+                    "Käyttäjän lisäys epäonnistui: " + ex.getMessage());
         }
     }
 
@@ -128,9 +156,13 @@ public class TkKayttaja {
             PreparedStatement poistolause = yhteys.prepareStatement(POISTA_KAYTTAJA);
             poistolause.setInt(1, id);
             poistolause.executeUpdate();
+
+
         } catch (Exception ex) {
-            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
-            throw new GourmetException("Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+            Logger.getLogger(TkKayttaja.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException(
+                    "Käyttäjän lisäys epäonnistui: " + ex.getMessage());
         }
     }
 }
