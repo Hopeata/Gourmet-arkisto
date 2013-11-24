@@ -27,6 +27,8 @@ public class TkKayttaja {
     private static final String HAE_TUNNUKSELLA_JA_SALASANALLA = HAE_KAYTTAJAT
             + " WHERE tunnus = ? AND salasana = ?";
     private static final String HAE_TUNNUKSELLA = "SELECT id FROM kayttaja WHERE tunnus = ?";
+    private static final String HAE_KAYTTAJA_TUNNUKSELLA = HAE_KAYTTAJAT + " WHERE tunnus = ?";
+    private static final String HAE_SAHKOPOSTILLA = HAE_KAYTTAJAT + " WHERE sahkoposti = ?";
     private static final String LISAA_KAYTTAJA = "INSERT INTO kayttaja (tunnus, sahkoposti, "
             + "salasana, admin_oikeudet, vip_oikeudet) VALUES (?, ?, ?, ?, ?)";
     private static final String POISTA_KAYTTAJA = "DELETE FROM kayttaja WHERE id = ?";
@@ -86,6 +88,28 @@ public class TkKayttaja {
         } catch (SQLException ex) {
             Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException("Tunnuksen tarkistus epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
+    public static List<Kayttaja> haeKayttajaa(String haku) {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        ResultSet rs = null;
+        try {
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_KAYTTAJA_TUNNUKSELLA);
+            kysely.setString(1, haku);
+            rs = kysely.executeQuery();
+            if (!rs.isBeforeFirst()) {
+                kysely = yhteys.prepareStatement(HAE_SAHKOPOSTILLA);
+                kysely.setString(1, haku);
+                rs = kysely.executeQuery();
+            }
+            List<Kayttaja> kayttajat = muunnaKayttajaOlioiksi(rs);
+            return kayttajat;
+        } catch (SQLException ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Hakutuloksen etsintä epäonnistui: " + ex.getMessage());
         } finally {
             Tietokanta.suljeYhteys(yhteys);
         }

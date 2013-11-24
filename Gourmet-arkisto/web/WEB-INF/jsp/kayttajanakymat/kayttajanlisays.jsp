@@ -56,7 +56,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Luo käyttäjätili</button>
-                <a class="btn btn-default" href="kirjautumisnakyma.jsp" role="button">Peruuta</a>
+                <a class="btn btn-default" href="${pageContext.request.contextPath}/kirjautuminen" role="button">Peruuta</a>
             </div>
         </div>
     </form>

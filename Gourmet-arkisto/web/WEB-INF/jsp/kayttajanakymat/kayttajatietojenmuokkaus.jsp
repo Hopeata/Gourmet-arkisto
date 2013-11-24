@@ -46,6 +46,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Tallenna muutokset</button>
+                <a class="btn btn-default" href="${pageContext.request.contextPath}/arkisto/kayttajantiedot" role="button">Peruuta</a>
             </div>
         </div>
     </form>

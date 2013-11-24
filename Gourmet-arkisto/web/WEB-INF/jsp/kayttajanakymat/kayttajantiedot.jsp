@@ -12,6 +12,7 @@
     <body>
         <t:pohja>
         <panel>
+            <div class="panel-heading"><h2>Omat tiedot</h2></div>
             <form class="form-horizontal" role="form" action="" method="POST">
                 <input name="action" type="hidden" id="action" value="muokkaus">
                 <div class="form-group">
@@ -27,21 +28,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-10">
+                    <div class="col-sm-offset-2 col-sm-10">                        
                         <input type="submit" name="muokkaus" value="Muokkaa tietojasi">
                         <input type="submit" name="poisto" value="Poista tilisi">
                     </div>
                 </div>
             </form>
-            <%--           <form name="frm" method="post" action="">
-        <input name="action" type="hidden" id="action" value="muokkaus">
-        <button type="submit" class="btn btn-default">Muokkaa tietoja</button>                                         
-    </form>
-    <form name="frm2" method="post" action="">
-        <input name="action" type="hidden" id="action" value="poisto">
-        <button type="submit" class="btn btn-default">Poista tilisi</button>                                         
-    </form>
-            --%>       </panel>
-        </t:pohja>
+        </panel>
+    </t:pohja>
 </body>
 </html>

@@ -22,9 +22,17 @@ public class KayttajalistausServlet extends YleisServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String viplisaysaction = req.getParameter("viplisaysaction");
         String vippoistoaction = req.getParameter("vippoistoaction");
+        String etsintaaction = req.getParameter("etsintaaction");
         String kayttajapoistoaction = req.getParameter("kayttajapoistoaction");
-        List<Kayttaja> kayttajat = TkKayttaja.haeKayttajat();
-        req.setAttribute("kayttajat", kayttajat);
+        List<Kayttaja> kayttajat = null;
+        if (etsintaaction != null) {
+            kayttajat = TkKayttaja.haeKayttajaa(req.getParameter("haku"));
+        } else {
+            kayttajat = TkKayttaja.haeKayttajat();
+        }
+        if (!kayttajat.isEmpty()) {
+            req.setAttribute("kayttajat", kayttajat);
+        }
         for (Kayttaja kayttaja : kayttajat) {
             req.setAttribute("kayttaja.tunnus", kayttaja.getTunnus());
             req.setAttribute("kayttaja.sahkoposti", kayttaja.getSahkoposti());
@@ -33,19 +41,17 @@ public class KayttajalistausServlet extends YleisServlet {
         }
         if (viplisaysaction == null && vippoistoaction == null && kayttajapoistoaction == null) {
             avaaSivu("/WEB-INF/jsp/kayttajanakymat/kayttajalistaus.jsp", req, resp);
-        }
-        if (viplisaysaction != null) {
+        } else if (viplisaysaction != null) {
             TkKayttaja.paivitaVipOikeudet(Integer.parseInt(viplisaysaction), false);
             siirrySivulle("/arkisto/kayttajalistaus", req, resp);
-        }
-        if (vippoistoaction != null) {
+        } else if (vippoistoaction != null) {
             TkKayttaja.paivitaVipOikeudet(Integer.parseInt(vippoistoaction), true);
             siirrySivulle("/arkisto/kayttajalistaus", req, resp);
-        }
-        if (kayttajapoistoaction != null) {
+        } else if (kayttajapoistoaction != null) {
             TkKayttaja.poistaKayttaja(Integer.parseInt(kayttajapoistoaction));
             siirrySivulle("/arkisto/kayttajalistaus", req, resp);
         }
+
 
     }
 
