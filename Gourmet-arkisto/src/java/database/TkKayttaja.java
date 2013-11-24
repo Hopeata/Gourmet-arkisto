@@ -166,7 +166,7 @@ public class TkKayttaja {
             Logger.getLogger(TkKayttaja.class
                     .getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException(
-                    "Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+                    "Käyttäjän vip-oikeuksien päivitys epäonnistui: " + ex.getMessage());
         }
     }
 
@@ -182,7 +182,7 @@ public class TkKayttaja {
             Logger.getLogger(TkKayttaja.class
                     .getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException(
-                    "Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+                    "Käyttäjän poisto epäonnistui: " + ex.getMessage());
         }
     }
 }

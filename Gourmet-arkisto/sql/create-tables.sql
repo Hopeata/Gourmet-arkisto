@@ -22,7 +22,7 @@ CREATE TABLE resepti (
     lisaysaika timestamp not null,
     ohje varchar not null,
     kuva_url varchar,
-    kayttaja_id int references kayttaja(id) not null,
+    kayttaja_id int references kayttaja(id) ON DELETE SET NULL,
     paaraaka_aine_id int references paaraaka_aine(id)
 );
 
@@ -37,14 +37,5 @@ CREATE TABLE reseptinnimi (
     on_paanimi boolean not null
 );
 
-CREATE TABLE ainesosa (
-    id serial primary key,
-    nimi varchar not null
-);
 
-CREATE TABLE reseptinainesosa (
-    resepti_id int references resepti(id) not null,
-    ainesosa_id int references ainesosa(id) not null,
-    maara varchar
-);
     

@@ -16,14 +16,6 @@ INSERT INTO ruokalaji(nimi) VALUES ('lisuke');
 INSERT INTO ruokalaji(nimi) VALUES ('juoma');
 
 
-INSERT INTO ainesosa(nimi) VALUES ('kana');
-
-INSERT INTO ainesosa(nimi) VALUES ('mustapippuri');
-
-INSERT INTO ainesosa(nimi) VALUES ('suola');
-
-INSERT INTO ainesosa(nimi) VALUES ('ananas');
-
 INSERT INTO paaraaka_aine(nimi) VALUES ('kana');
 
 INSERT INTO paaraaka_aine(nimi) VALUES ('kala');
