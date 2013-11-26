@@ -13,46 +13,50 @@
         <t:pohja>
             <div>
                 <h1>Ehdota reseptiä!</h1>
-                <form class="form-horizontal" role="form" action="paanakyma.jsp" method="POST">
+                <c:if test="${virheViesti != null}">
+                    <div class="alert alert-danger">${virheViesti}</div>
+                    <c:remove var="virheViesti" scope="session"/>
+                </c:if>
+                <form class="form-horizontal" role="form" action="" method="POST">
+                    <input name="action" type="hidden" id="action" value="reseptinlisays">
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Reseptin nimi:* </label>
                         <div class="col-sm-10">
-                            <input name="nimi" type="text" class="form-control" id="nimi">
+                            <input name="nimi" type="text" class="form-control" id="nimi" value="${nimi}">
+                            <c:remove var="nimi" scope="session"/>                        
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Kuvan URL:  </label>
                         <div class="col-sm-10">
-                            <input name="kuvaURL" type="text" class="form-control" id="kuvaUrl">
+                            <input name="kuvaUrl" type="text" class="form-control" id="kuvaUrl" value="${kuvaUrl}">
+                            <c:remove var="kuvaUrl" scope="session"/>                        
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="checkbox" class="col-sm-2 control-label">Ruokalaji:* </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" id="inlineCheckbox1" value="option1"> Alkupala
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" id="inlineCheckbox1" value="option1"> Pääruoka
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" id="inlineCheckbox1" value="option1"> Jälkiruoka
-                        </label>
+                        <c:forEach var="ruokalaji" items="${ruokalajit}">                    
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="ruokalajiCheckbox" value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
+                            </label>
+                        </c:forEach>
                     </div>
                     <div class="form-group">
-                        <label for="select" class="col-sm-2 control-label">Pääruoka-aine: </label>
-                        <div class="col-sm-10">
-                            <select class="form-control">
-                                <option>Ei valintaa</option>
-                                <option>Kana</option>
-                                <option>Kala</option>
-                                <option>Liha</option>
-                            </select>
-                        </div>
+                        <label for="radio" class="col-sm-2 control-label">Pääraaka-aine: </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="paaraakaAineRadio" id="eivalintaa" value="" checked>Ei valintaa
+                        </label>
+                        <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
+                            <label class="radio-inline">
+                                <input type="radio" name="paaraakaAineRadio" id="<c:out value="${paaraakaAine.id}"/>" value="<c:out value="${paaraakaAine.id}"/>"><c:out value="${paaraakaAine.paaraakaAine}"/>
+                            </label>
+                        </c:forEach>
                     </div>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Reseptin kuvaus:* </label>
                         <div class="col-sm-10">
-                            <textarea rows="6" name="ohje" class="form-control" id="ohje"></textarea>
+                            <textarea rows="6" name="ohje" class="form-control" id="ohje">${ohje}</textarea>
+                            <c:remove var="ohje" scope="session"/>                        
                         </div>
                     </div>               
             </div>

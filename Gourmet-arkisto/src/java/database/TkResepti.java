@@ -4,6 +4,7 @@
  */
 package database;
 
+import com.sun.rmi.rmid.ExecOptionPermission;
 import exceptions.GourmetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.PaaraakaAine;
 import models.Resepti;
 import models.ReseptinNimi;
+import models.Ruokalaji;
 
 /**
  *
@@ -28,7 +31,11 @@ public class TkResepti {
             + "kuva_url, kayttaja_id, paaraaka_aine_id) VALUES (?, ?, ?, ?, ?)";
     private static final String LISAA_RESEPTIN_NIMI = "INSERT INTO reseptinnimi (resepti_id, "
             + "nimi, on_paanimi) VALUES (?, ?, ?)";
+    private static final String LISAA_RESEPTIN_RUOKALAJI = "INSERT INTO reseptinruokalaji (ruokalaji_id, "
+            + "resepti_id) VALUES (?, ?)";
     private static final String HAE_RESEPTIN_NIMET = "SELECT nimi FROM resepti, WHERE reseptin_id = ?";
+    private static final String HAE_RUOKALAJIT = "SELECT * FROM ruokalaji";
+    private static final String HAE_PAARAAKAAINEET = "SELECT * FROM paaraaka_aine";
 
     private static List<Resepti> muunnaNimettomiksiReseptiOlioiksi(ResultSet rs) throws SQLException {
         List<Resepti> reseptit = new ArrayList<Resepti>();
@@ -77,7 +84,53 @@ public class TkResepti {
         return reseptit;
     }
 
-    public static void lisaaReseptiKantaan(Resepti resepti) {
+    private static List<Ruokalaji> muunnaRuokalajiOlioiksi(ResultSet rs) throws SQLException {
+        List<Ruokalaji> ruokalajit = new ArrayList<Ruokalaji>();
+        while (rs.next()) {
+            ruokalajit.add(new Ruokalaji(rs.getInt("id"), rs.getString("nimi")));
+        }
+        return ruokalajit;
+    }
+
+    public static List<Ruokalaji> haeRuokalajit() {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_RUOKALAJIT);
+            List<Ruokalaji> ruokalajit = muunnaRuokalajiOlioiksi(kysely.executeQuery());
+            kysely.close();
+            return ruokalajit;
+        } catch (SQLException ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Ruokalajien haku epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
+    private static List<PaaraakaAine> muunnaPaaraakaAineOlioiksi(ResultSet rs) throws SQLException {
+        List<PaaraakaAine> paaraakaAineet = new ArrayList<PaaraakaAine>();
+        while (rs.next()) {
+            paaraakaAineet.add(new PaaraakaAine(rs.getInt("id"), rs.getString("nimi")));
+        }
+        return paaraakaAineet;
+    }
+
+    public static List<PaaraakaAine> haePaaraakaAineet() {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_PAARAAKAAINEET);
+            List<PaaraakaAine> paaraakaAineet = muunnaPaaraakaAineOlioiksi(kysely.executeQuery());
+            kysely.close();
+            return paaraakaAineet;
+        } catch (SQLException ex) {
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Ruokalajien haku epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
+    public static void lisaaResepti(Resepti resepti) {
         try {
             Connection yhteys = Tietokanta.avaaYhteys();
             yhteys.setAutoCommit(false);

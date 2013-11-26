@@ -38,7 +38,7 @@
             <li><a href="#">Pääsivu</a></li>
             <%--          <c:choose>
                            <c:when test="${kayttaja.vipOikeudet}">
-            --%>                 <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays?action=lisays">Lisää resepti</a></li>
+            --%>                 <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Lisää resepti</a></li>
             <%--               </c:when>
                            <c:otherwise>
                                <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays?action=ehdotus">Ehdota reseptiä</a></li>       

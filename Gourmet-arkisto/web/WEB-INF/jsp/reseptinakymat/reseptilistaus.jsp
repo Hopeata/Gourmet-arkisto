@@ -12,40 +12,50 @@
     <body>
         <t:pohja>
             <h1>Tervetuloa, ${kayttajatunnus}!</h1>
+            <br>
             <div class="panel panel-default">
                 <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <div class="form-group">
+                        <label for="checkbox" class="col-sm-2 control-label">Ruokalajit </label>
+                        <c:forEach var="ruokalaji" items="${ruokalajit}">                    
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="ruokalajiCheckbox" value="option1"><c:out value="${ruokalaji.ruokalaji}"/>
+                            </label>
+                        </c:forEach>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkbox" class="col-sm-2 control-label">Pääraaka-aineet </label>
+                        <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="paaraakaAineCheckbox" value="option1"><c:out value="${paaraakaAine.paaraakaAine}"/>
+                            </label>
+                        </c:forEach>
+                    </div>
+                </div>
+                <br>
+                <br>
                 <div class="panel-heading">Reseptit</div>
-
                 <!-- Table -->
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>Nimi</th>
                             <th>Ruokalaji</th>
-                            <th>Pääruoka-aine</th>
+                            <th>Pääraaka-aine</th>
                             <th>Lisätty</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><a href="reseptinakyma.jsp">Banaanikana intialaisittain</a></td>
-                            <td>Pääruoka</td>
-                            <td>Kana</td>
-                            <td>16.08.13</td>
-                        </tr>
-                        <tr>
-                            <td>Taivaallinen mangosorbetti</td>
-                            <td>Jälkiruoka</td>
-                            <td>Mango</td>
-                            <td>17.07.13</td>
-                        </tr>
-                        <tr>
-                            <td>Täydelliset mozzarellaleivät</td>
-                            <td>Välipala</td>
-                            <td>Juusto</td>
-                            <td>16.07.13</td>
-                        </tr>
-                    </tbody>
+                        <%--                     <c:forEach var="resepti" items="${reseptit}">
+                            <tr>
+                                <td><c:out value="${resepti.tunnus}"/></td>
+                                <td><c:out value="${resepti.ruokalaji}"/></td>
+                                <td><c:out value="${resepti.paaruoka-aine}"/></td>
+                                <td><c:out value="${resepti.tunnus}"/></td>
+                            </tr>
+                        </c:forEach>
+                        --%>               </tbody>
                 </table>
             </div>
             <ul class="pagination">
