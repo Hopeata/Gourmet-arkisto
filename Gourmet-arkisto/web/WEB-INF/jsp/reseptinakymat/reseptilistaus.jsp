@@ -40,22 +40,26 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Nimi</th>
+                            <th><a>Nimi</a></th>
                             <th>Ruokalaji</th>
                             <th>Pääraaka-aine</th>
                             <th>Lisätty</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <%--                     <c:forEach var="resepti" items="${reseptit}">
+                        <c:forEach var="resepti" items="${reseptit}">
                             <tr>
-                                <td><c:out value="${resepti.tunnus}"/></td>
-                                <td><c:out value="${resepti.ruokalaji}"/></td>
-                                <td><c:out value="${resepti.paaruoka-aine}"/></td>
-                                <td><c:out value="${resepti.tunnus}"/></td>
+                                <td><c:out value="${resepti.paanimi}"/></td>
+                                <td>
+                                    <c:forEach var="ruokalaji" items="${resepti.ruokalajit}">
+                                        <c:out value="${ruokalaji.ruokalaji}"/>
+                                    </c:forEach>
+                                </td>
+                                <td><c:out value="${resepti.paaraakaAineNimi}"/></td>
+                                <td><c:out value="${resepti.lisaysaika}"/></td>
                             </tr>
                         </c:forEach>
-                        --%>               </tbody>
+                    </tbody>
                 </table>
             </div>
             <ul class="pagination">

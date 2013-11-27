@@ -6,11 +6,15 @@ package servlets;
 
 import database.TkResepti;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import models.Kayttaja;
 import models.PaaraakaAine;
+import models.Resepti;
 import models.Ruokalaji;
 
 /**
@@ -31,7 +35,7 @@ public class ReseptinLisaysServlet extends YleisServlet {
         List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
         req.setAttribute("paaraakaAineet", paaraakaAineet);
         for (PaaraakaAine paaraakaAine : paaraakaAineet) {
-            req.setAttribute("paaraakaAine.id", paaraakaAine.getId());
+            req.setAttribute("paaraakaAine.id", paaraakaAine);
             req.setAttribute("paaraakaAine.paaraakaAine", paaraakaAine.getPaaraakaAine());
         }
         if (action == null) {
@@ -68,7 +72,25 @@ public class ReseptinLisaysServlet extends YleisServlet {
             lisaaSessioon(req, "nimi", nimi);
             lisaaSessioon(req, "kuvaUrl", kuvaUrl);
             lisaaSessioon(req, "ohje", ohje);
+            siirrySivulle("/arkisto/reseptinlisays", req, resp);
+        } else {
+            HttpSession session = req.getSession();
+            Kayttaja tekija = (Kayttaja) session.getAttribute("kirjautunut");
+            int paaraakaAineId = Integer.parseInt(paaraakaAine);
+            PaaraakaAine paaraakaAineOlio = null;
+            List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
+            for (PaaraakaAine paaraakaAine1 : paaraakaAineet) {
+                if (paaraakaAine1.getId() == paaraakaAineId) {
+                    paaraakaAineOlio = paaraakaAine1;
+                }
+            }
+            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, null);
+            List<Integer> ruokalajiIdt = new ArrayList<Integer>();
+            for (String ruokalajiId : ruokalajit) {
+                ruokalajiIdt.add(Integer.parseInt(ruokalajiId));
+            }
+            TkResepti.lisaaResepti(resepti, ruokalajiIdt, nimi);
+            siirrySivulle("/arkisto/reseptinlisays", req, resp);
         }
-        siirrySivulle("/arkisto/reseptinlisays", req, resp);
     }
 }

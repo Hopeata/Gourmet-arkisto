@@ -4,7 +4,7 @@
  */
 package models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -14,15 +14,16 @@ import java.util.List;
 public class Resepti {
 
     private int id;
-    private Date lisaysaika;
+    private Timestamp lisaysaika;
     private String ohje;
     private String kuvaUrl;
-    private int tekija;
-    private int paaraakaAine;
+    private Kayttaja tekija;
+    private PaaraakaAine paaraakaAine;
     private List<ReseptinNimi> nimet;
+    private List<Ruokalaji> ruokalajit;
 
-    public Resepti(int id, Date lisaysaika, String ohje, String kuvaUrl,
-            int tekija, int paaraakaAine, List<ReseptinNimi> nimet) {
+    public Resepti(int id, Timestamp lisaysaika, String ohje, String kuvaUrl,
+            Kayttaja tekija, PaaraakaAine paaraakaAine, List<ReseptinNimi> nimet, List<Ruokalaji> ruokalajit) {
         this.id = id;
         this.lisaysaika = lisaysaika;
         this.ohje = ohje;
@@ -30,6 +31,7 @@ public class Resepti {
         this.tekija = tekija;
         this.paaraakaAine = paaraakaAine;
         this.nimet = nimet;
+        this.ruokalajit = ruokalajit;
     }
 
     public int getId() {
@@ -40,11 +42,11 @@ public class Resepti {
         this.id = id;
     }
 
-    public Date getLisaysaika() {
+    public Timestamp getLisaysaika() {
         return lisaysaika;
     }
 
-    public void setLisaysaika(Date lisaysaika) {
+    public void setLisaysaika(Timestamp lisaysaika) {
         this.lisaysaika = lisaysaika;
     }
 
@@ -64,19 +66,19 @@ public class Resepti {
         this.kuvaUrl = kuvaUrl;
     }
 
-    public int getTekija() {
+    public Kayttaja getTekija() {
         return tekija;
     }
 
-    public void setTekija(int tekija) {
+    public void setTekija(Kayttaja tekija) {
         this.tekija = tekija;
     }
 
-    public int getPaaraakaAine() {
+    public PaaraakaAine getPaaraakaAine() {
         return paaraakaAine;
     }
 
-    public void setPaaraakaAine(int paaraakaAine) {
+    public void setPaaraakaAine(PaaraakaAine paaraakaAine) {
         this.paaraakaAine = paaraakaAine;
     }
 
@@ -87,9 +89,8 @@ public class Resepti {
     public void setNimet(List<ReseptinNimi> nimet) {
         this.nimet = nimet;
     }
-    
-    
-    public String haePaanimi() {
+
+    public String getPaanimi() {
         String paanimi = null;
         for (ReseptinNimi reseptinNimi : nimet) {
             if (reseptinNimi.isOnPaanimi()) {
@@ -97,5 +98,21 @@ public class Resepti {
             }
         }
         return paanimi;
+    }
+
+    public String getPaaraakaAineNimi() {
+        if (paaraakaAine != null) {
+            return paaraakaAine.getPaaraakaAine();
+        } else {
+            return "";
+        }
+    }
+
+    public List<Ruokalaji> getRuokalajit() {
+        return ruokalajit;
+    }
+
+    public void setRuokalajit(List<Ruokalaji> ruokalajit) {
+        this.ruokalajit = ruokalajit;
     }
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import models.Kayttaja;
 import models.PaaraakaAine;
 import models.Ruokalaji;
+import models.Resepti;
 
 /**
  *
@@ -36,6 +37,23 @@ public class ReseptiListausServlet extends YleisServlet {
         req.setAttribute("paaraakaAineet", paaraakaAineet);
         for (PaaraakaAine paaraakaAine : paaraakaAineet) {
             req.setAttribute("paaraakaAine.paaraakaAine", paaraakaAine.getPaaraakaAine());
+        }
+        List<Resepti> reseptit = TkResepti.haeReseptit();
+        req.setAttribute("reseptit", reseptit);
+        for (Resepti resepti : reseptit) {
+            req.setAttribute("resepti.paanimi", resepti.getPaanimi());
+            //           StringBuilder ruokalajiNimet = new StringBuilder();
+            //           List<Ruokalaji> ruokaljilista = resepti.getRuokalajit();
+            //           for (Ruokalaji ruokalaji : ruokaljilista) {
+            //               ruokalajiNimet.append(ruokalaji.getRuokalaji());
+            //           }
+            req.setAttribute("resepti.ruokalajit", resepti.getRuokalajit());
+            List<Ruokalaji> reseptinRuokalajit = resepti.getRuokalajit();
+            for (Ruokalaji ruokalaji : reseptinRuokalajit) {
+                req.setAttribute("ruokalaji.ruokalaji", ruokalaji.getRuokalaji());
+            }
+            req.setAttribute("resepti.paaraakaAineNimi", resepti.getPaaraakaAineNimi());
+            req.setAttribute("resepti.lisaysaika", resepti.getLisaysaika());
         }
         avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptilistaus.jsp", req, resp);
     }

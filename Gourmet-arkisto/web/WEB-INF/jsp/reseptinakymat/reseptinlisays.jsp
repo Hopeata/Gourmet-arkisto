@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label for="radio" class="col-sm-2 control-label">Pääraaka-aine: </label>
                         <label class="radio-inline">
-                            <input type="radio" name="paaraakaAineRadio" id="eivalintaa" value="" checked>Ei valintaa
+                            <input type="radio" name="paaraakaAineRadio" id="eivalintaa" value="-1" checked>Ei valintaa
                         </label>
                         <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
                             <label class="radio-inline">
