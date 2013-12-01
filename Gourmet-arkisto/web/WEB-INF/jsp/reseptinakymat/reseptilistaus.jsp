@@ -76,7 +76,7 @@
                                     </c:forEach>
                                 </td>
                                 <td><c:out value="${resepti.paaraakaAineNimi}"/></td>
-                                <td><c:out value="${resepti.lisaysaika}"/></td>
+                                <td><c:out value="${resepti.lisaysaikaFormatoitu}"/></td>
                             </tr>
                         </c:forEach>
                         <c:remove var="reseptit" scope="session"/>

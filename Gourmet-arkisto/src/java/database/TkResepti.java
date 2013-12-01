@@ -43,6 +43,7 @@ public class TkResepti {
     private static final String HAE_RESEPTI_HAKUEHDOILLA = "SELECT * FROM resepti r INNER JOIN reseptinruokalaji rr ON (r.id=rr.resepti_id) "
             + "INNER JOIN reseptinnimi rn ON (r.id = rn.resepti_id) "
             + "WHERE (LOWER(nimi) LIKE LOWER(?) OR LOWER(ohje) LIKE LOWER(?))";
+    private static final String JARJESTA_RESEPTIT_PVM_MUKAAN = " ORDER BY lisaysaika DESC";
     private static final String HAE_RUOKALAJIT = "SELECT * FROM ruokalaji";
     private static final String HAE_RUOKALAJIT_IDLLA = HAE_RUOKALAJIT + " WHERE id = ?";
     private static final String HAE_RESEPTIN_RUOKALAJI_ID = "SELECT ruokalaji_id FROM reseptinruokalaji WHERE resepti_id = ?";
@@ -130,7 +131,7 @@ public class TkResepti {
         List<Resepti> reseptit = null;
         Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            PreparedStatement kysely = yhteys.prepareStatement(HAE_RESEPTIT);
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_RESEPTIT + JARJESTA_RESEPTIT_PVM_MUKAAN);
             ResultSet rs = kysely.executeQuery();
             reseptit = muunnaNimettomiksiReseptiOlioiksi(yhteys, rs);
             kysely.close();
@@ -173,7 +174,7 @@ public class TkResepti {
                 }
                 hakuehdot.append(")");
             }
-            String haku = HAE_RESEPTI_HAKUEHDOILLA + hakuehdot.toString();
+            String haku = HAE_RESEPTI_HAKUEHDOILLA + hakuehdot.toString() + JARJESTA_RESEPTIT_PVM_MUKAAN;
             PreparedStatement kysely = yhteys.prepareStatement(haku);
             kysely.setString(1, "%" + hakusana + "%");
             kysely.setString(2, "%" + hakusana + "%");

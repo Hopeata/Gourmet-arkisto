@@ -5,6 +5,7 @@
 package models;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public class Resepti {
 
+    private static SimpleDateFormat SDF = new SimpleDateFormat("dd.MM.YYYY HH:mm");
+    
     private int id;
     private Timestamp lisaysaika;
     private String ohje;
@@ -44,6 +47,10 @@ public class Resepti {
 
     public Timestamp getLisaysaika() {
         return lisaysaika;
+    }
+    
+    public String getLisaysaikaFormatoitu() {
+        return SDF.format(lisaysaika);
     }
 
     public void setLisaysaika(Timestamp lisaysaika) {

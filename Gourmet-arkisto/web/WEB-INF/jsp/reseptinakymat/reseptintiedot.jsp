@@ -34,8 +34,8 @@
                 <form class="form" role="form" action="" method="POST">
                     <div class="form-group">
                         <div class="col-sm-10">                        
-                            <input type="submit" name="muokkaus" value="Muokkaa reseptiä">
-                            <input type="submit" name="poisto" value="Poista resepti">
+                            <%--                          <input type="submit" name="muokkaus" value="Muokkaa reseptiä"> 
+                            --%>                          <input type="submit" name="poisto" value="Poista resepti">
                         </div>                
                     </div>
                 </form>
