@@ -48,6 +48,10 @@
         <servlet-name>KayttajanTietojenMuokkaus</servlet-name>
         <servlet-class>servlets.KayttajanTietojenMuokkausServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReseptinTiedot</servlet-name>
+        <servlet-class>servlets.ReseptinTiedotServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -83,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>KayttajanTietojenMuokkaus</servlet-name>
         <url-pattern>/arkisto/tietojenmuokkaus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReseptinTiedot</servlet-name>
+        <url-pattern>/arkisto/reseptintiedot</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

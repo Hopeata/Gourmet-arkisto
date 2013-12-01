@@ -42,6 +42,8 @@ public class ReseptinLisaysServlet extends YleisServlet {
             avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptinlisays.jsp", req, resp);
         } else if (action.equals("reseptinlisays")) {
             lisaaResepti(req, resp);
+        } else if (action.equals("reseptinmuokkaus")) {
+            muokkaaReseptia(req, resp);
         }
     }
 
@@ -90,7 +92,11 @@ public class ReseptinLisaysServlet extends YleisServlet {
                 ruokalajiIdt.add(Integer.parseInt(ruokalajiId));
             }
             TkResepti.lisaaResepti(resepti, ruokalajiIdt, nimi);
-            siirrySivulle("/arkisto/reseptinlisays", req, resp);
+            siirrySivulle("/arkisto/reseptilistaus", req, resp);
         }
+    }
+
+    private void muokkaaReseptia(HttpServletRequest req, HttpServletResponse resp) {
+        avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptinlisays.jsp", req, resp);
     }
 }

@@ -21,7 +21,11 @@ import utilities.SalausUtility;
  * @author Valeria
  */
 public class TkKayttaja {
-    
+
+    // Lisäyslauseet
+    private static final String LISAA_KAYTTAJA = "INSERT INTO kayttaja (tunnus, sahkoposti, "
+            + "salasana, admin_oikeudet, vip_oikeudet) VALUES (?, ?, ?, ?, ?)";
+    // Hakulauseet
     private static final String HAE_KAYTTAJAT =
             "SELECT id, tunnus, sahkoposti, admin_oikeudet, vip_oikeudet FROM kayttaja";
     private static final String JARJESTA_TUNNUKSEN_MUKAAN = " ORDER BY tunnus";
@@ -30,13 +34,13 @@ public class TkKayttaja {
     private static final String HAE_TUNNUKSELLA = "SELECT id FROM kayttaja WHERE tunnus = ?";
     private static final String HAE_IDLLA = HAE_KAYTTAJAT + " WHERE id = ?";
     private static final String HAE_TUNNUKSELLA_TAI_SAHKOPOSTILLA = HAE_KAYTTAJAT + " WHERE tunnus LIKE ? OR sahkoposti LIKE ?";
-    private static final String LISAA_KAYTTAJA = "INSERT INTO kayttaja (tunnus, sahkoposti, "
-            + "salasana, admin_oikeudet, vip_oikeudet) VALUES (?, ?, ?, ?, ?)";
+    // Poistolauseet
     private static final String POISTA_KAYTTAJA = "DELETE FROM kayttaja WHERE id = ?";
+    // Päivityslauseet
     private static final String PAIVITA_VIP = "UPDATE kayttaja SET vip_oikeudet = ? WHERE id = ?";
     private static final String PAIVITA_TIEDOT = "UPDATE kayttaja SET tunnus = ?, sahkoposti = ? WHERE id = ?";
     private static final String PAIVITA_SALASANA = "UPDATE kayttaja SET salasana = ? WHERE id = ?";
-    
+
     private static List<Kayttaja> muunnaKayttajaOlioiksi(ResultSet rs) throws SQLException {
         List<Kayttaja> kayttajat = new ArrayList<Kayttaja>();
         while (rs.next()) {
@@ -45,12 +49,11 @@ public class TkKayttaja {
         }
         return kayttajat;
     }
-    
+
     public static Kayttaja kirjaudu(String tunnus, String salasana) {
-        
+        Connection yhteys = Tietokanta.avaaYhteys();
         Kayttaja kirjautunutKayttaja = null;
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
             PreparedStatement kysely = yhteys.prepareStatement(HAE_TUNNUKSELLA_JA_SALASANALLA);
             kysely.setString(1, tunnus);
             kysely.setString(2, SalausUtility.salaaSalasana(salasana));
@@ -59,14 +62,15 @@ public class TkKayttaja {
                 kirjautunutKayttaja = kayttajat.get(0);
             }
             kysely.close();
-            Tietokanta.suljeYhteys(yhteys);
+            return kirjautunutKayttaja;
         } catch (Exception ex) {
             Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException("Kirjautuminen epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
         }
-        return kirjautunutKayttaja;
     }
-    
+
     public static Kayttaja haeKayttajaIdlla(int id) {
         Connection yhteys = Tietokanta.avaaYhteys();
         try {
@@ -81,19 +85,21 @@ public class TkKayttaja {
             Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static List<Kayttaja> haeKayttajat() {
+        Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
             PreparedStatement kysely = yhteys.prepareStatement(HAE_KAYTTAJAT + JARJESTA_TUNNUKSEN_MUKAAN);
             List<Kayttaja> kayttajat = muunnaKayttajaOlioiksi(kysely.executeQuery());
             return kayttajat;
         } catch (Exception ex) {
             Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException("Käyttäjien haku epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static boolean tunnusOlemassa(String tunnus) {
         Connection yhteys = Tietokanta.avaaYhteys();
         try {
@@ -108,7 +114,7 @@ public class TkKayttaja {
             Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static List<Kayttaja> haeKayttajaa(String haku) {
         Connection yhteys = Tietokanta.avaaYhteys();
         ResultSet rs = null;
@@ -126,10 +132,10 @@ public class TkKayttaja {
             Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static void lisaaKayttaja(Kayttaja kayttaja, String salasana) {
+        Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
             PreparedStatement lisayslause = yhteys.prepareStatement(LISAA_KAYTTAJA);
             lisayslause.setString(1, kayttaja.getTunnus());
             lisayslause.setString(2, kayttaja.getSahkoposti());
@@ -140,9 +146,11 @@ public class TkKayttaja {
         } catch (Exception ex) {
             Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException("Käyttäjän lisäys epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static void paivitaKayttajaTiedot(Kayttaja kayttaja, String salasana) {
         Connection yhteys = Tietokanta.avaaYhteys();
         try {
@@ -164,10 +172,10 @@ public class TkKayttaja {
             Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static void paivitaVipOikeudet(int id, boolean vipOikeus) {
+        Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
             PreparedStatement paivityslause = yhteys.prepareStatement(PAIVITA_VIP);
             if (vipOikeus) {
                 paivityslause.setBoolean(1, false);
@@ -176,29 +184,27 @@ public class TkKayttaja {
             }
             paivityslause.setInt(2, id);
             paivityslause.executeUpdate();
-            
-            
+            paivityslause.close();
         } catch (Exception ex) {
-            Logger.getLogger(TkKayttaja.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            throw new GourmetException(
-                    "Käyttäjän vip-oikeuksien päivitys epäonnistui: " + ex.getMessage());
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Käyttäjän vip-oikeuksien päivitys epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
         }
     }
-    
+
     public static void poistaKayttaja(int id) {
+        Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
             PreparedStatement poistolause = yhteys.prepareStatement(POISTA_KAYTTAJA);
             poistolause.setInt(1, id);
             poistolause.executeUpdate();
-            
-            
+            poistolause.close();
         } catch (Exception ex) {
-            Logger.getLogger(TkKayttaja.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            throw new GourmetException(
-                    "Käyttäjän poisto epäonnistui: " + ex.getMessage());
+            Logger.getLogger(TkKayttaja.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Käyttäjän poisto epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
         }
     }
 }

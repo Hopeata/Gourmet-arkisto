@@ -5,19 +5,19 @@
 package servlets;
 
 import database.TkKayttaja;
-import models.Kayttaja;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Kayttaja;
 
 /**
  *
  * @author Valeria
  */
 public class KayttajalistausServlet extends YleisServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String viplisaysaction = req.getParameter("viplisaysaction");
@@ -53,10 +53,10 @@ public class KayttajalistausServlet extends YleisServlet {
             TkKayttaja.poistaKayttaja(Integer.parseInt(kayttajapoistoaction));
             siirrySivulle("/arkisto/kayttajalistaus", req, resp);
         }
-
-
+        
+        
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);

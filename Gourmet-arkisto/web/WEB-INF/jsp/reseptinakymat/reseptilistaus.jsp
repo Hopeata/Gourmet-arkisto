@@ -16,22 +16,41 @@
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
-                    <div class="form-group">
-                        <label for="checkbox" class="col-sm-2 control-label">Ruokalajit </label>
-                        <c:forEach var="ruokalaji" items="${ruokalajit}">                    
-                            <label class="checkbox-inline">
-                                <input type="checkbox" id="ruokalajiCheckbox" value="option1"><c:out value="${ruokalaji.ruokalaji}"/>
-                            </label>
-                        </c:forEach>
-                    </div>
-                    <div class="form-group">
-                        <label for="checkbox" class="col-sm-2 control-label">Pääraaka-aineet </label>
-                        <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
-                            <label class="checkbox-inline">
-                                <input type="checkbox" id="paaraakaAineCheckbox" value="option1"><c:out value="${paaraakaAine.paaraakaAine}"/>
-                            </label>
-                        </c:forEach>
-                    </div>
+                    <form class="form-horizontal" name="perushakuform" id="perushakuform" role="form" action="" method="POST">
+                        <input name="perushakuaction" type="hidden" id="perushakuaction" value="perushaku">
+                        <div class="form-group">
+                            <label for="checkbox" class="col-sm-2 control-label">Hakusana </label>
+                            <div class="col-sm-2">
+                                <input type="text" name="perushaku" class="form-control" id="perushaku" value="${perushakusana}" placeholder="Search">
+                                <c:remove var="perushakusana" scope="session"/>   
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkbox" class="col-sm-2 control-label">Ruokalajit </label>
+                            <div class="col-sm-5">
+                                <c:forEach var="ruokalaji" items="${ruokalajit}">                    
+                                    <label class="checkbox-inline">
+                                        <input name="ruokalajiCheckbox" type="checkbox" id="ruokalajiCheckbox" value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
+                                    </label>
+                                </c:forEach>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkbox" class="col-sm-2 control-label">Pääraaka-aineet </label>
+                            <div class="col-sm-5">
+                                <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
+                                    <label class="checkbox-inline">
+                                        <input name="paaraakaAineCheckbox" type="checkbox" id="paaraakaAineCheckbox" value="<c:out value="${paaraakaAine.id}"/>"><c:out value="${paaraakaAine.paaraakaAine}"/>
+                                    </label>
+                                </c:forEach>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">                        
+                                <button type="submit" name="perushakubtn" id="perushakubtn" class="btn btn-default" onclick="document.getElementById('pikahaku').value = '';"><span class="glyphicon glyphicon-search"></span> Hae</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <br>
                 <br>
@@ -49,7 +68,7 @@
                     <tbody>
                         <c:forEach var="resepti" items="${reseptit}">
                             <tr>
-                                <td><c:out value="${resepti.paanimi}"/></td>
+                                <td><a href="${pageContext.request.contextPath}/arkisto/reseptintiedot?action=<c:out value="${resepti.id}"/>"><c:out value="${resepti.paanimi}"/></a></td>
                                 <td>
                                     <c:forEach var="ruokalaji" items="${resepti.ruokalajit}">
                                         <c:out value="${ruokalaji.ruokalaji}"/>

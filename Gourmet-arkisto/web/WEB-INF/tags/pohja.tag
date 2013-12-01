@@ -35,7 +35,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="${pageContext.request.contextPath}/kirjautuminen?action=logout"><span class="glyphicon glyphicon-log-out"></span> Kirjaudu ulos </a></li>
             </ul>
-            <li><a href="#">Pääsivu</a></li>
+            <li><a href="${pageContext.request.contextPath}/arkisto/reseptilistaus">Pääsivu</a></li>
             <%--          <c:choose>
                            <c:when test="${kayttaja.vipOikeudet}">
             --%>                 <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Lisää resepti</a></li>
@@ -46,12 +46,16 @@
                        </c:choose>
             --%>           <li><a href="${pageContext.request.contextPath}/arkisto/kayttajantiedot">Omat tiedot</a></li>
             <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
-            <form class="navbar-form navbar-left" role="search">
+            <%--
+            <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/arkisto/reseptilistaus" name="pikahakuform" id="pikahakuform" role="search">
+                <input name="reseptinetsintaaction" type="hidden" id="reseptinetsintaaction" value="pikahaku">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" name="pikahaku" class="form-control" id="pikahaku" value="${pikahakusana}" placeholder="Search">
+                    <c:remove var="pikahakusana" scope="session"/>   
                 </div>
-                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Hae</button>
+                <button type="submit" name="pikahakubtn" id="pikahakubtn" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Hae</button>
             </form>
+            --%>
         </ul>
         <jsp:doBody/>
     </body>

@@ -26,13 +26,13 @@
                 <input name="action" type="hidden" id="action" value="login">
                 <div class="form-group">
                     <label for="inputText" class="col-md-2 control-label">Tunnus</label>
-                    <div class="col-md-10">
+                    <div class="col-md-3">
                         <input name="username" type="text" class="form-control" id="username" placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword1" class="col-md-2 control-label">Salasana</label>
-                    <div class="col-md-10">
+                    <div class="col-md-3">
                         <input name="password" type="password" class="form-control" id="inputPassword1" placeholder="Password">
                     </div>
                 </div>

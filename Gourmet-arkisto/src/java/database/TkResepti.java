@@ -4,7 +4,6 @@
  */
 package database;
 
-import com.sun.rmi.rmid.ExecOptionPermission;
 import exceptions.GourmetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,9 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,19 +29,29 @@ import models.Ruokalaji;
  */
 public class TkResepti {
 
-    private static final String HAE_RESEPTIT = "SELECT * FROM resepti";
+    // Lisäyslauseet
     private static final String LISAA_RESEPTI = "INSERT INTO resepti (lisaysaika, ohje, "
             + "kuva_url, kayttaja_id, paaraaka_aine_id) VALUES (?, ?, ?, ?, ?)";
     private static final String LISAA_RESEPTIN_NIMI = "INSERT INTO reseptinnimi (resepti_id, "
             + "nimi, on_paanimi) VALUES (?, ?, ?)";
     private static final String LISAA_RESEPTIN_RUOKALAJI = "INSERT INTO reseptinruokalaji (ruokalaji_id, "
             + "resepti_id) VALUES (?, ?)";
+    // Hakulauseet
+    private static final String HAE_RESEPTIT = "SELECT * FROM resepti";
+    private static final String HAE_RESEPTI_IDLLA = HAE_RESEPTIT + " WHERE id = ?";
     private static final String HAE_RESEPTIN_NIMET = "SELECT * FROM reseptinnimi WHERE resepti_id = ?";
+    private static final String HAE_RESEPTI_HAKUEHDOILLA = "SELECT * FROM resepti r INNER JOIN reseptinruokalaji rr ON (r.id=rr.resepti_id) "
+            + "INNER JOIN reseptinnimi rn ON (r.id = rn.resepti_id) "
+            + "WHERE (LOWER(nimi) LIKE LOWER(?) OR LOWER(ohje) LIKE LOWER(?))";
     private static final String HAE_RUOKALAJIT = "SELECT * FROM ruokalaji";
     private static final String HAE_RUOKALAJIT_IDLLA = HAE_RUOKALAJIT + " WHERE id = ?";
     private static final String HAE_RESEPTIN_RUOKALAJI_ID = "SELECT ruokalaji_id FROM reseptinruokalaji WHERE resepti_id = ?";
     private static final String HAE_PAARAAKAAINEET = "SELECT * FROM paaraaka_aine";
     private static final String HAE_PAARAAKAAINE_IDLLA = HAE_PAARAAKAAINEET + " WHERE id = ?";
+    // Poistolauseet
+    private static final String POISTA_RESEPTI = "DELETE FROM resepti WHERE id = ?";
+    private static final String POISTA_RESEPTIN_RUOKALAJIT = "DELETE FROM reseptinruokalaji WHERE resepti_id = ?";
+    private static final String POISTA_RESEPTIN_NIMET = "DELETE FROM reseptinnimi WHERE resepti_id = ?";
 
     private static List<Resepti> muunnaNimettomiksiReseptiOlioiksi(Connection yhteys, ResultSet rs) throws SQLException {
         List<Resepti> reseptit = new ArrayList<Resepti>();
@@ -98,10 +107,29 @@ public class TkResepti {
         return reseptinRuokalajit;
     }
 
+    public static Resepti haeResepti(int id) {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_RESEPTI_IDLLA);
+            kysely.setInt(1, id);
+            ResultSet rs = kysely.executeQuery();
+            List<Resepti> reseptit = muunnaNimettomiksiReseptiOlioiksi(yhteys, rs);
+            kysely.close();
+            Resepti resepti = reseptit.get(0);
+            resepti.setNimet(haeReseptinNimet(yhteys, resepti.getId()));
+            return resepti;
+        } catch (SQLException ex) {
+            Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Reseptin haku epäonnistui: " + ex.getMessage());
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
     public static List<Resepti> haeReseptit() {
         List<Resepti> reseptit = null;
+        Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
             PreparedStatement kysely = yhteys.prepareStatement(HAE_RESEPTIT);
             ResultSet rs = kysely.executeQuery();
             reseptit = muunnaNimettomiksiReseptiOlioiksi(yhteys, rs);
@@ -109,13 +137,80 @@ public class TkResepti {
             for (Resepti resepti : reseptit) {
                 resepti.setNimet(haeReseptinNimet(yhteys, resepti.getId()));
             }
-            Tietokanta.suljeYhteys(yhteys);
+            return reseptit;
         } catch (SQLException ex) {
             Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
             throw new GourmetException("Reseptien haku epäonnistui: " + ex.getMessage());
 
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
         }
-        return reseptit;
+    }
+
+    public static List<Resepti> haeReseptia(String hakusana, String[] ruokalajit, String[] paaraakaAineet) {
+        List<Resepti> reseptit = new ArrayList<Resepti>();
+        HashSet<Integer> reseptinIdt = new HashSet<Integer>();
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            StringBuilder hakuehdot = new StringBuilder();
+            if (ruokalajit != null && ruokalajit.length != 0) {
+                hakuehdot.append(" AND (");
+                for (int i = 0; i < ruokalajit.length; i++) {
+                    hakuehdot.append("ruokalaji_id = ?");
+                    if (i != ruokalajit.length - 1) {
+                        hakuehdot.append(" OR ");
+                    }
+                }
+                hakuehdot.append(")");
+            }
+            if (paaraakaAineet != null && paaraakaAineet.length != 0) {
+                hakuehdot.append(" AND (");
+                for (int i = 0; i < paaraakaAineet.length; i++) {
+                    hakuehdot.append("paaraaka_aine_id = ?");
+                    if (i != paaraakaAineet.length - 1) {
+                        hakuehdot.append(" OR ");
+                    }
+                }
+                hakuehdot.append(")");
+            }
+            String haku = HAE_RESEPTI_HAKUEHDOILLA + hakuehdot.toString();
+            PreparedStatement kysely = yhteys.prepareStatement(haku);
+            kysely.setString(1, "%" + hakusana + "%");
+            kysely.setString(2, "%" + hakusana + "%");
+            int parametrinIndeksi = 3;
+            if (ruokalajit != null) {
+                for (String ruokalajiId : ruokalajit) {
+                    kysely.setInt(parametrinIndeksi, Integer.parseInt(ruokalajiId));
+                    parametrinIndeksi++;
+                }
+            }
+            if (paaraakaAineet != null) {
+                for (String paaraakaAineId : paaraakaAineet) {
+                    kysely.setInt(parametrinIndeksi, Integer.parseInt(paaraakaAineId));
+                    parametrinIndeksi++;
+                }
+            }
+            ResultSet rs = kysely.executeQuery();
+            List<Resepti> haetutReseptit = muunnaNimettomiksiReseptiOlioiksi(yhteys, rs);
+            kysely.close();
+            for (Resepti resepti : haetutReseptit) {
+                int id = resepti.getId();
+                if (!reseptinIdt.contains(id)) {
+                    reseptinIdt.add(id);
+                    reseptit.add(resepti);
+                }
+            }
+            for (Resepti resepti : reseptit) {
+                resepti.setNimet(haeReseptinNimet(yhteys, resepti.getId()));
+            }
+            return reseptit;
+        } catch (SQLException ex) {
+            Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Reseptien haku epäonnistui: " + ex.getMessage());
+
+        } finally {
+            Tietokanta.suljeYhteys(yhteys);
+        }
     }
 
     private static List<Ruokalaji> muunnaRuokalajiOlioiksi(ResultSet rs) throws SQLException {
@@ -181,16 +276,12 @@ public class TkResepti {
 
     public static void lisaaResepti(Resepti resepti, List<Integer> ruokalajiIdt, String reseptinPaanimi) {
         Connection yhteys = Tietokanta.avaaYhteys();
-        PreparedStatement lisayslause = null;
-        PreparedStatement ruokalajinlisayslause = null;
-        PreparedStatement nimenlisayslause = null;
         try {
             yhteys.setAutoCommit(false);
-            lisayslause = yhteys.prepareStatement(LISAA_RESEPTI, Statement.RETURN_GENERATED_KEYS);
-            ruokalajinlisayslause = yhteys.prepareStatement(LISAA_RESEPTIN_RUOKALAJI);
-            nimenlisayslause = yhteys.prepareStatement(LISAA_RESEPTIN_NIMI);
-            Date pvm = new Date();
-            Timestamp lisaysaika = new Timestamp(pvm.getTime());
+            PreparedStatement lisayslause = yhteys.prepareStatement(LISAA_RESEPTI, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ruokalajinlisayslause = yhteys.prepareStatement(LISAA_RESEPTIN_RUOKALAJI);
+            PreparedStatement nimenlisayslause = yhteys.prepareStatement(LISAA_RESEPTIN_NIMI);
+            Timestamp lisaysaika = new Timestamp(new Date().getTime());
             lisayslause.setTimestamp(1, lisaysaika);
             lisayslause.setString(2, resepti.getOhje());
             lisayslause.setString(3, resepti.getKuvaUrl());
@@ -215,50 +306,56 @@ public class TkResepti {
             nimenlisayslause.setString(2, reseptinPaanimi);
             nimenlisayslause.setBoolean(3, true);
             nimenlisayslause.executeUpdate();
-
             yhteys.commit();
         } catch (SQLException ex) {
-            Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 System.err.print("Transaction is being rolled back");
                 yhteys.rollback();
             } catch (SQLException excep) {
+                Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
                 throw new GourmetException("Reseptinlisäys epäonnistui: " + ex.getMessage());
             }
         } finally {
             try {
-                if (lisayslause != null) {
-                    lisayslause.close();
-                }
-                if (ruokalajinlisayslause != null) {
-                    ruokalajinlisayslause.close();
-                }
-                if (nimenlisayslause != null) {
-                    nimenlisayslause.close();
-                }
                 yhteys.setAutoCommit(true);
             } catch (SQLException ex) {
                 Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GourmetException("Yhteyden automatisointi epäonnistui: " + ex.getMessage());
             }
             Tietokanta.suljeYhteys(yhteys);
         }
     }
 
-    public static void poistaResepti(Resepti resepti) {
+    public static void poistaResepti(int id) {
+        Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            Connection yhteys = Tietokanta.avaaYhteys();
-            Statement poisto = yhteys.createStatement();
-            poisto.executeUpdate("DELETE FROM resepti WHERE id=" + resepti.getId());
-
-
+            yhteys.setAutoCommit(false);
+            PreparedStatement reseptinPoistolause = yhteys.prepareStatement(POISTA_RESEPTI);
+            PreparedStatement reseptinNimienPoistolause = yhteys.prepareStatement(POISTA_RESEPTIN_NIMET);
+            PreparedStatement reseptinRuokalajinPoistolause = yhteys.prepareStatement(POISTA_RESEPTIN_RUOKALAJIT);
+            reseptinPoistolause.setInt(1, id);
+            reseptinNimienPoistolause.setInt(1, id);
+            reseptinRuokalajinPoistolause.setInt(1, id);
+            reseptinNimienPoistolause.executeUpdate();
+            reseptinRuokalajinPoistolause.executeUpdate();
+            reseptinPoistolause.executeUpdate();
+            yhteys.commit();
         } catch (SQLException ex) {
-            Logger.getLogger(TkResepti.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            throw new GourmetException(
-                    "Reseptinlisäys epäonnistui: " + ex.getMessage());
-
+            try {
+                yhteys.rollback();
+                throw new GourmetException("Reseptin poisto epäonnistui: " + ex.getMessage());
+            } catch (SQLException excep) {
+                Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GourmetException("Reseptin poisto epäonnistui: " + ex.getMessage());
+            }
+        } finally {
+            try {
+                yhteys.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GourmetException("Yhteyden automatisointi epäonnistui: " + ex.getMessage());
+            }
+            Tietokanta.suljeYhteys(yhteys);
         }
-
-
     }
 }

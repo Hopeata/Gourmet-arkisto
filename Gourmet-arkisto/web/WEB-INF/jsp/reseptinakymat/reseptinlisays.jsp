@@ -18,17 +18,24 @@
                     <c:remove var="virheViesti" scope="session"/>
                 </c:if>
                 <form class="form-horizontal" role="form" action="" method="POST">
-                    <input name="action" type="hidden" id="action" value="reseptinlisays">
+                    <c:choose>
+                        <c:when test="${action == 'reseptinmuokkaus'}">
+                            <input name="action" type="hidden" id="action" value="reseptinmuokkaus">
+                        </c:when>
+                        <c:otherwise>
+                            <input name="action" type="hidden" id="action" value="reseptinlisays">
+                        </c:otherwise>
+                    </c:choose>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Reseptin nimi:* </label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-5">
                             <input name="nimi" type="text" class="form-control" id="nimi" value="${nimi}">
                             <c:remove var="nimi" scope="session"/>                        
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Kuvan URL:  </label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-5">
                             <input name="kuvaUrl" type="text" class="form-control" id="kuvaUrl" value="${kuvaUrl}">
                             <c:remove var="kuvaUrl" scope="session"/>                        
                         </div>
@@ -54,7 +61,7 @@
                     </div>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Reseptin kuvaus:* </label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-8">
                             <textarea rows="6" name="ohje" class="form-control" id="ohje">${ohje}</textarea>
                             <c:remove var="ohje" scope="session"/>                        
                         </div>

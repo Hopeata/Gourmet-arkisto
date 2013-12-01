@@ -21,7 +21,7 @@ public class KayttajanTiedotServlet extends YleisServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Kayttaja kayttaja = (Kayttaja) session.getAttribute("kirjautunut");
+        Kayttaja kayttaja = (Kayttaja)session.getAttribute("kirjautunut");
         req.setAttribute("tunnus", kayttaja.getTunnus());
         if (kayttaja.getSahkoposti() != null && !kayttaja.getSahkoposti().equals("")) {
             req.setAttribute("sahkoposti", kayttaja.getSahkoposti());
