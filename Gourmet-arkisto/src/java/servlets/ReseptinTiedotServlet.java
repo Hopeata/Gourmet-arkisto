@@ -41,10 +41,8 @@ public class ReseptinTiedotServlet extends YleisServlet {
                 TkResepti.poistaResepti(resepti.getId());
                 siirrySivulle("/arkisto/reseptilistaus", req, resp);
             } else if (req.getParameter("muokkaus") != null) {
-                req.setAttribute("action", "reseptinmuokkaus");
-                lisaaSessioon(req, "nimi", resepti.getPaanimi());
-                lisaaSessioon(req, "kuvaUrl", resepti.getKuvaUrl());
-                lisaaSessioon(req, "ohje", resepti.getOhje());
+                lisaaSessioon(req, "action", "reseptinmuokkaus");
+                lisaaSessioon(req, "resepti", resepti);
                 siirrySivulle("/arkisto/reseptinlisays", req, resp);
             }
         }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import models.Kayttaja;
 import models.PaaraakaAine;
 import models.Resepti;
+import models.ReseptinNimi;
 import models.Ruokalaji;
 
 /**
@@ -28,16 +29,8 @@ public class ReseptinLisaysServlet extends YleisServlet {
         String action = req.getParameter("action");
         List<Ruokalaji> ruokalajit = TkResepti.haeRuokalajit();
         req.setAttribute("ruokalajit", ruokalajit);
-        for (Ruokalaji ruokalaji : ruokalajit) {
-            req.setAttribute("ruokalaji.id", ruokalaji.getId());
-            req.setAttribute("ruokalaji.ruokalaji", ruokalaji.getRuokalaji());
-        }
         List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
         req.setAttribute("paaraakaAineet", paaraakaAineet);
-        for (PaaraakaAine paaraakaAine : paaraakaAineet) {
-            req.setAttribute("paaraakaAine.id", paaraakaAine);
-            req.setAttribute("paaraakaAine.paaraakaAine", paaraakaAine.getPaaraakaAine());
-        }
         if (action == null) {
             avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptinlisays.jsp", req, resp);
         } else if (action.equals("reseptinlisays")) {
@@ -70,10 +63,11 @@ public class ReseptinLisaysServlet extends YleisServlet {
             virheviestit.append("Reseptin kuvaus puuttuu! <br/>");
         }
         if (virheviestit.length() > 0) {
+            List<ReseptinNimi> nimet = new ArrayList<ReseptinNimi>();
+            nimet.add(new ReseptinNimi(-1, nimi, true));
+            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, null, null, nimet, null);
             lisaaVirheViesti(req, virheviestit.toString());
-            lisaaSessioon(req, "nimi", nimi);
-            lisaaSessioon(req, "kuvaUrl", kuvaUrl);
-            lisaaSessioon(req, "ohje", ohje);
+            lisaaSessioon(req, "resepti", resepti);
             siirrySivulle("/arkisto/reseptinlisays", req, resp);
         } else {
             HttpSession session = req.getSession();

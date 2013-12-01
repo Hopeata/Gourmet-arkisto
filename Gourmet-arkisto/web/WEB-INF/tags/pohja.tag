@@ -46,7 +46,6 @@
                        </c:choose>
             --%>           <li><a href="${pageContext.request.contextPath}/arkisto/kayttajantiedot">Omat tiedot</a></li>
             <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
-            <%--
             <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/arkisto/reseptilistaus" name="pikahakuform" id="pikahakuform" role="search">
                 <input name="reseptinetsintaaction" type="hidden" id="reseptinetsintaaction" value="pikahaku">
                 <div class="form-group">
@@ -55,7 +54,6 @@
                 </div>
                 <button type="submit" name="pikahakubtn" id="pikahakubtn" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Hae</button>
             </form>
-            --%>
         </ul>
         <jsp:doBody/>
     </body>

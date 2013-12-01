@@ -49,6 +49,11 @@ public class YleisServlet extends HttpServlet {
         session.setAttribute(avain, arvo);
     }
 
+    public static void lisaaSessioon(HttpServletRequest request, String avain, Object arvo) {
+        HttpSession session = request.getSession(false);
+        session.setAttribute(avain, arvo);
+    }    
+    
     public static boolean onKirjautunut(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         if (session.getAttribute("kirjautunut") != null) {
             return true;

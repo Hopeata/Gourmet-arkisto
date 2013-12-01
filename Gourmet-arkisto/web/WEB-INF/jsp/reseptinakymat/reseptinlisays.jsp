@@ -26,17 +26,18 @@
                             <input name="action" type="hidden" id="action" value="reseptinlisays">
                         </c:otherwise>
                     </c:choose>
+                    <c:remove var="action" scope="session"/>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Reseptin nimi:* </label>
                         <div class="col-sm-5">
-                            <input name="nimi" type="text" class="form-control" id="nimi" value="${nimi}">
+                            <input name="nimi" type="text" class="form-control" id="nimi" value="${resepti.paanimi}">
                             <c:remove var="nimi" scope="session"/>                        
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Kuvan URL:  </label>
                         <div class="col-sm-5">
-                            <input name="kuvaUrl" type="text" class="form-control" id="kuvaUrl" value="${kuvaUrl}">
+                            <input name="kuvaUrl" type="text" class="form-control" id="kuvaUrl" value="${resepti.kuvaUrl}">
                             <c:remove var="kuvaUrl" scope="session"/>                        
                         </div>
                     </div>
@@ -62,10 +63,11 @@
                     <div class="form-group">
                         <label for="inputText" class="col-sm-2 control-label">Reseptin kuvaus:* </label>
                         <div class="col-sm-8">
-                            <textarea rows="6" name="ohje" class="form-control" id="ohje">${ohje}</textarea>
+                            <textarea rows="6" name="ohje" class="form-control" id="ohje">${resepti.ohje}</textarea>
                             <c:remove var="ohje" scope="session"/>                        
                         </div>
-                    </div>               
+                    </div>           
+                    <c:remove var="resepti" scope="session"/>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">

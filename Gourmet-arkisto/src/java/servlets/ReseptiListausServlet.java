@@ -7,6 +7,7 @@ package servlets;
 import database.TkResepti;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,19 +32,22 @@ public class ReseptiListausServlet extends YleisServlet {
         Kayttaja kayttaja = (Kayttaja) session.getAttribute("kirjautunut");
         resp.setContentType("text/html;charset=UTF-8");
         req.setAttribute("kayttajatunnus", kayttaja.getTunnus());
-        List<Ruokalaji> ruokalajit = TkResepti.haeRuokalajit();
-        req.setAttribute("ruokalajit", ruokalajit);
-        for (Ruokalaji ruokalaji : ruokalajit) {
-            req.setAttribute("ruokalaji.id", ruokalaji.getId());
-            req.setAttribute("ruokalaji.ruokalaji", ruokalaji.getRuokalaji());
-        }
+        List<Ruokalaji> ruokalajit = (List<Ruokalaji>) session.getAttribute("ruokalajit");
+        if (ruokalajit == null) {
+            ruokalajit = TkResepti.haeRuokalajit();
+        }              
+        lisaaSessioon(req, "ruokalajit", ruokalajit);
         List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
         req.setAttribute("paaraakaAineet", paaraakaAineet);
         for (PaaraakaAine paaraakaAine : paaraakaAineet) {
             req.setAttribute("paaraakaAine.id", paaraakaAine.getId());
             req.setAttribute("paaraakaAine.paaraakaAine", paaraakaAine.getPaaraakaAine());
         }
-        List<Resepti> reseptit = new ArrayList<Resepti>();
+        List<Resepti> reseptit = (List) session.getAttribute("reseptit");
+        if (reseptit == null) {
+            reseptit = new ArrayList<Resepti>();
+        }
+        boolean avaaSivu = false;
         if (reseptinetsintaaction != null) {
             String pikahakusana = req.getParameter("pikahaku");
             reseptit = TkResepti.haeReseptia(pikahakusana, null, null);
@@ -51,30 +55,31 @@ public class ReseptiListausServlet extends YleisServlet {
         } else if (perushakuaction != null) {
             String perushakusana = req.getParameter("perushaku");
             String[] ruokalajitulokset = req.getParameterValues("ruokalajiCheckbox");
+            List<String> valitutRuokalajit = Arrays.asList(ruokalajitulokset);
             String[] paaraakaAinetulokset = req.getParameterValues("paaraakaAineCheckbox");
             reseptit = TkResepti.haeReseptia(perushakusana, ruokalajitulokset, paaraakaAinetulokset);
             lisaaSessioon(req, "perushakusana", perushakusana);
-        } else {
-            reseptit = TkResepti.haeReseptit();
-        }
-        req.setAttribute("reseptit", reseptit);
-        for (Resepti resepti : reseptit) {
-            req.setAttribute("resepti.id", resepti.getId());
-            req.setAttribute("resepti.paanimi", resepti.getPaanimi());
-            req.setAttribute("resepti.ruokalajit", resepti.getRuokalajit());
-            List<Ruokalaji> reseptinRuokalajit = resepti.getRuokalajit();
-            for (Ruokalaji ruokalaji : reseptinRuokalajit) {
-                req.setAttribute("ruokalaji.ruokalaji", ruokalaji.getRuokalaji());
+            for (Ruokalaji ruokalaji : ruokalajit) {
+                if (valitutRuokalajit.contains("" + ruokalaji.getId())) {
+                    ruokalaji.setChecked(true);
+                }
             }
-            req.setAttribute("resepti.paaraakaAineNimi", resepti.getPaaraakaAineNimi());
-            req.setAttribute("resepti.lisaysaika", resepti.getLisaysaika());
+        } else {
+            if (session.getAttribute("reseptit") == null) {
+                reseptit = TkResepti.haeReseptit();
+            }
+            avaaSivu = true;
         }
-        avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptilistaus.jsp", req, resp);
+        lisaaSessioon(req, "reseptit", reseptit);
+        if (avaaSivu) {
+            avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptilistaus.jsp", req, resp);
+        } else {
+            siirrySivulle("/arkisto/reseptilistaus", req, resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
-    
 }

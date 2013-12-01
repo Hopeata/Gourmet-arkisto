@@ -30,9 +30,10 @@
                             <div class="col-sm-5">
                                 <c:forEach var="ruokalaji" items="${ruokalajit}">                    
                                     <label class="checkbox-inline">
-                                        <input name="ruokalajiCheckbox" type="checkbox" id="ruokalajiCheckbox" value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
+                                        <input name="ruokalajiCheckbox" type="checkbox" id="ruokalajiCheckbox" <c:if test="${ruokalaji.checked}">checked="checked"</c:if> value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
                                     </label>
                                 </c:forEach>
+                                <c:remove var="ruokalajit" scope="session"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -78,6 +79,7 @@
                                 <td><c:out value="${resepti.lisaysaika}"/></td>
                             </tr>
                         </c:forEach>
+                        <c:remove var="reseptit" scope="session"/>
                     </tbody>
                 </table>
             </div>

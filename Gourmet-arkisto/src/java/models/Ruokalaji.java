@@ -9,9 +9,10 @@ package models;
  * @author Valeria
  */
 public class Ruokalaji {
-    
+
     private int id;
     private String ruokalaji;
+    private boolean checked;
 
     public Ruokalaji(int id, String ruokalaji) {
         this.id = id;
@@ -25,7 +26,12 @@ public class Ruokalaji {
     public String getRuokalaji() {
         return ruokalaji;
     }
-    
-    
-    
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }
