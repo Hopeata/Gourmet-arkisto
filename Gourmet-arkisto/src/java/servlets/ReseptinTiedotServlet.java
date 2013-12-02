@@ -32,7 +32,7 @@ public class ReseptinTiedotServlet extends YleisServlet {
                 if (resepti.getPaaraakaAine() != null) {
                     req.setAttribute("paaraakaAine", resepti.getPaaraakaAine().getPaaraakaAine());
                 }
-                req.setAttribute("lisaysAika", resepti.getLisaysaika());
+                req.setAttribute("lisaysAika", resepti.getLisaysaikaFormatoitu());
                 req.setAttribute("ohje", resepti.getOhje());
                 HttpSession session = req.getSession();
                 req.setAttribute("onAdmin", onAdminOikeudet(session));

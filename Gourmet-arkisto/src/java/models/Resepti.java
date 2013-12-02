@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Resepti {
 
-    private static SimpleDateFormat SDF = new SimpleDateFormat("dd.MM.YYYY HH:mm");
+    private static SimpleDateFormat SDF = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     
     private int id;
     private Timestamp lisaysaika;
