@@ -41,9 +41,10 @@
                             <div class="col-sm-5">
                                 <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
                                     <label class="checkbox-inline">
-                                        <input name="paaraakaAineCheckbox" type="checkbox" id="paaraakaAineCheckbox" value="<c:out value="${paaraakaAine.id}"/>"><c:out value="${paaraakaAine.paaraakaAine}"/>
+                                        <input name="paaraakaAineCheckbox" type="checkbox" id="paaraakaAineCheckbox" <c:if test="${paaraakaAine.checked}">checked="checked"</c:if> value="<c:out value="${paaraakaAine.id}"/>"><c:out value="${paaraakaAine.paaraakaAine}"/>
                                     </label>
                                 </c:forEach>
+                                <c:remove var="paaraakaAineet" scope="session"/>
                             </div>
                         </div>
                         <div class="form-group">

@@ -35,14 +35,13 @@ public class ReseptiListausServlet extends YleisServlet {
         List<Ruokalaji> ruokalajit = (List<Ruokalaji>) session.getAttribute("ruokalajit");
         if (ruokalajit == null) {
             ruokalajit = TkResepti.haeRuokalajit();
-        }              
-        lisaaSessioon(req, "ruokalajit", ruokalajit);
-        List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
-        req.setAttribute("paaraakaAineet", paaraakaAineet);
-        for (PaaraakaAine paaraakaAine : paaraakaAineet) {
-            req.setAttribute("paaraakaAine.id", paaraakaAine.getId());
-            req.setAttribute("paaraakaAine.paaraakaAine", paaraakaAine.getPaaraakaAine());
         }
+        lisaaSessioon(req, "ruokalajit", ruokalajit);
+        List<PaaraakaAine> paaraakaAineet = (List<PaaraakaAine>) session.getAttribute("paaraakaAineet");
+        if (paaraakaAineet == null) {
+            paaraakaAineet = TkResepti.haePaaraakaAineet();
+        }
+        lisaaSessioon(req, "paaraakaAineet", paaraakaAineet);
         List<Resepti> reseptit = (List) session.getAttribute("reseptit");
         if (reseptit == null) {
             reseptit = new ArrayList<Resepti>();
@@ -55,13 +54,25 @@ public class ReseptiListausServlet extends YleisServlet {
         } else if (perushakuaction != null) {
             String perushakusana = req.getParameter("perushaku");
             String[] ruokalajitulokset = req.getParameterValues("ruokalajiCheckbox");
-            List<String> valitutRuokalajit = Arrays.asList(ruokalajitulokset);
+            List<String> valitutRuokalajit = new ArrayList<String>();
+            if (ruokalajitulokset != null) {
+                valitutRuokalajit = Arrays.asList(ruokalajitulokset);
+            }
             String[] paaraakaAinetulokset = req.getParameterValues("paaraakaAineCheckbox");
+            List<String> valitutPaaraakaAineet = new ArrayList<String>();
+            if (paaraakaAinetulokset != null) {
+                valitutPaaraakaAineet = Arrays.asList(paaraakaAinetulokset);
+            }
             reseptit = TkResepti.haeReseptia(perushakusana, ruokalajitulokset, paaraakaAinetulokset);
             lisaaSessioon(req, "perushakusana", perushakusana);
             for (Ruokalaji ruokalaji : ruokalajit) {
                 if (valitutRuokalajit.contains("" + ruokalaji.getId())) {
                     ruokalaji.setChecked(true);
+                }
+            }
+            for (PaaraakaAine paaraakaAine : paaraakaAineet) {
+                if (valitutPaaraakaAineet.contains("" + paaraakaAine.getId())) {
+                    paaraakaAine.setChecked(true);
                 }
             }
         } else {

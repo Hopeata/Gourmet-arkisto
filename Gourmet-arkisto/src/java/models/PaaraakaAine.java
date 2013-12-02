@@ -12,6 +12,7 @@ public class PaaraakaAine {
 
     private int id;
     private String paaraakaAine;
+    private boolean checked;
 
     public PaaraakaAine(int id, String paaraakaAine) {
         this.id = id;
@@ -24,5 +25,13 @@ public class PaaraakaAine {
 
     public String getPaaraakaAine() {
         return paaraakaAine;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

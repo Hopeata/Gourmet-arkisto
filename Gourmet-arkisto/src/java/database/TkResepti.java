@@ -53,6 +53,9 @@ public class TkResepti {
     private static final String POISTA_RESEPTI = "DELETE FROM resepti WHERE id = ?";
     private static final String POISTA_RESEPTIN_RUOKALAJIT = "DELETE FROM reseptinruokalaji WHERE resepti_id = ?";
     private static final String POISTA_RESEPTIN_NIMET = "DELETE FROM reseptinnimi WHERE resepti_id = ?";
+    // Päivityslauseet
+    private static final String PAIVITA_RESEPTI = "UPDATE resepti SET lisaysaika = ?, ohje = ?, kuva_url = ?, paaraaka_aine_id = ? WHERE id = ?";
+    private static final String PAIVITA_RESEPTIN_PAANIMI = "UPDATE reseptinnimi SET nimi = ? WHERE resepti_id = ? AND on_paanimi = ?";
 
     private static List<Resepti> muunnaNimettomiksiReseptiOlioiksi(Connection yhteys, ResultSet rs) throws SQLException {
         List<Resepti> reseptit = new ArrayList<Resepti>();
@@ -315,6 +318,57 @@ public class TkResepti {
             } catch (SQLException excep) {
                 Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
                 throw new GourmetException("Reseptinlisäys epäonnistui: " + ex.getMessage());
+            }
+        } finally {
+            try {
+                yhteys.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GourmetException("Yhteyden automatisointi epäonnistui: " + ex.getMessage());
+            }
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
+    public static void muokkaaReseptia(Resepti resepti, List<Integer> ruokalajiIdt, String reseptinPaanimi) {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            yhteys.setAutoCommit(false);
+            PreparedStatement muokkauslause = yhteys.prepareStatement(PAIVITA_RESEPTI);
+            PreparedStatement ruokalajipoistolause = yhteys.prepareStatement(POISTA_RESEPTIN_RUOKALAJIT);
+            PreparedStatement ruokalajilisayslause = yhteys.prepareStatement(LISAA_RESEPTIN_RUOKALAJI);
+            PreparedStatement nimenmuokkauslause = yhteys.prepareStatement(PAIVITA_RESEPTIN_PAANIMI);
+            Timestamp lisaysaika = new Timestamp(new Date().getTime());
+            muokkauslause.setTimestamp(1, lisaysaika);
+            muokkauslause.setString(2, resepti.getOhje());
+            muokkauslause.setString(3, resepti.getKuvaUrl());
+            if (resepti.getPaaraakaAine() == null) {
+                muokkauslause.setNull(4, java.sql.Types.INTEGER);
+            } else {
+                muokkauslause.setInt(4, resepti.getPaaraakaAine().getId());
+            }
+            muokkauslause.setInt(5, resepti.getTekija().getId());
+            muokkauslause.executeUpdate();
+            int id = resepti.getId();
+            ruokalajipoistolause.setInt(1, id);
+            ruokalajipoistolause.executeUpdate();
+            for (Integer ruokalajiId : ruokalajiIdt) {
+                ruokalajilisayslause.setInt(1, ruokalajiId);
+                ruokalajilisayslause.setInt(2, id);
+                ruokalajilisayslause.executeUpdate();
+            }
+            nimenmuokkauslause.setString(1, reseptinPaanimi);
+            nimenmuokkauslause.setInt(2, id);
+            nimenmuokkauslause.setBoolean(3, true);
+            nimenmuokkauslause.executeUpdate();
+            yhteys.commit();
+        } catch (SQLException ex) {
+            try {
+                System.err.print("Transaction is being rolled back");
+                yhteys.rollback();
+            } catch (SQLException excep) {
+                Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GourmetException("Reseptin muokkaus epäonnistui: " + ex.getMessage());
             }
         } finally {
             try {
