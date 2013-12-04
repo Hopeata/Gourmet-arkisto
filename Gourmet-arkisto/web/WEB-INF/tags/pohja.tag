@@ -36,15 +36,14 @@
                 <li><a href="${pageContext.request.contextPath}/kirjautuminen?action=logout"><span class="glyphicon glyphicon-log-out"></span> Kirjaudu ulos </a></li>
             </ul>
             <li><a href="${pageContext.request.contextPath}/arkisto/reseptilistaus">Pääsivu</a></li>
-            <%--          <c:choose>
-                           <c:when test="${kayttaja.vipOikeudet}">
-            --%>                 <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Lisää resepti</a></li>
-            <%--               </c:when>
-                           <c:otherwise>
-                               <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays?action=ehdotus">Ehdota reseptiä</a></li>       
-                           </c:otherwise>
-                       </c:choose>
-            --%>           <li><a href="${pageContext.request.contextPath}/arkisto/kayttajantiedot">Omat tiedot</a></li>
+            <c:choose>
+                <c:when test="${onVipOikeudet == true}">
+                    <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Lisää resepti</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Ehdota reseptiä</a></li>                           </c:otherwise>
+            </c:choose>
+            <li><a href="${pageContext.request.contextPath}/arkisto/kayttajantiedot">Omat tiedot</a></li>
             <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
             <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/arkisto/reseptilistaus" name="pikahakuform" id="pikahakuform" role="search">
                 <input name="reseptinetsintaaction" type="hidden" id="reseptinetsintaaction" value="pikahaku">

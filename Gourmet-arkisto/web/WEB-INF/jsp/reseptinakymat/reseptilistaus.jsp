@@ -55,20 +55,14 @@
                     </form>
                 </div>
                 <c:if test="${onAdmin == true}">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <c:if test="${onAdmin == true}">
-                                <form class="form" role="form" action="" method="POST">
-                                    <div class="form-group">
-                                        <div class="col-sm-10">                                            
-                                            <input type="submit" name="ehdotukset" value="Näytä ehdotukset"> 
-                                            <input type="submit" name="reseptit" value="Näytä lisätyt reseptit">
-                                        </div>                
-                                    </div>
-                                </form>
-                            </c:if>
+                    <form class="form" role="form" action="" method="POST">
+                        <div class="form-group">
+                            <div class="col-sm-10">                                            
+                                <input type="submit" name="ehdotukset" value="Näytä ehdotukset"> 
+                                <input type="submit" name="reseptit" value="Näytä lisätyt reseptit">
+                            </div>                
                         </div>
-                    </div>
+                    </form>
                 </c:if>
                 <br>
                 <br>

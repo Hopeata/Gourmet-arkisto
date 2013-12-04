@@ -28,6 +28,7 @@ public class ReseptinLisaysServlet extends YleisServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         HttpSession session = req.getSession();
+        req.setAttribute("onVipOikeudet", onVipOikeudet(session));
         Resepti resepti = (Resepti) session.getAttribute("resepti");
         if (resepti != null) {
             lisaaSessioon(req, "muokattavaResepti", resepti);

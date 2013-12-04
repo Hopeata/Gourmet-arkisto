@@ -185,7 +185,7 @@ public class TkResepti {
             kysely.setBoolean(1, onEhdotus);
             kysely.setString(2, "%" + hakusana + "%");
             kysely.setString(3, "%" + hakusana + "%");
-            int parametrinIndeksi = 3;
+            int parametrinIndeksi = 4;
             if (ruokalajit != null) {
                 for (String ruokalajiId : ruokalajit) {
                     kysely.setInt(parametrinIndeksi, Integer.parseInt(ruokalajiId));
@@ -366,7 +366,7 @@ public class TkResepti {
             } else {
                 muokkauslause.setInt(4, resepti.getPaaraakaAine().getId());
             }
-            muokkauslause.setInt(5, resepti.getTekija().getId());
+            muokkauslause.setInt(5, resepti.getId() );
             muokkauslause.executeUpdate();
             int id = resepti.getId();
             ruokalajipoistolause.setInt(1, id);

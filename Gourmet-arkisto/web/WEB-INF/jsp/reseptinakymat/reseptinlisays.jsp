@@ -12,7 +12,14 @@
     <body>
         <t:pohja>
             <div>
-                <h1>Ehdota reseptiä!</h1>
+                <c:choose>
+                    <c:when test="${onVipOikeudet == true}">
+                        <h1>Lisää resepti!</h1>
+                    </c:when>
+                    <c:otherwise>
+                        <h1>Ehdota reseptiä!</h1>
+                    </c:otherwise>
+                </c:choose>
                 <c:if test="${virheViesti != null}">
                     <div class="alert alert-danger">${virheViesti}</div>
                     <c:remove var="virheViesti" scope="session"/>
@@ -69,11 +76,23 @@
                     </div>           
                     <c:remove var="resepti" scope="session"/>
             </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">Ehdota reseptiä!</button>
-                </div>
-            </div>
+            <c:choose>
+                <c:when test="${onVipOikeudet == true}">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Lisää resepti!</button>
+                        </div>
+                    </div>               
+                </c:when>
+                <c:otherwise>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Ehdota reseptiä!</button>
+                        </div>
+                    </div>                
+                </c:otherwise>
+            </c:choose>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <h5>* Tähdellä merkityt kentät pakollisia!</h5>

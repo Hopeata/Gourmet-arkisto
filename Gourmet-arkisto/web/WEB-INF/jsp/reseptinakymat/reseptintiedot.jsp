@@ -12,21 +12,38 @@
     <body>
         <t:pohja>
             <h1>${nimi}</h1>
-            <div class="row">
-                <c:if test="${tekija != null}">
-                    <div class="col-md-2">Tekija: ${tekija}</div>                
-                </c:if>
-                <div class="col-md-2">Lisätty: ${lisaysAika}</div>
-                <c:if test="${paaraakaAine != null}">
-                    <div class="col-md-2">Pääraaka-aine: ${paaraakaAine}</div>
-                </c:if>
-                <div class="col-md-2">Ruokalaji: </div> 
-            </div>
-            <div class="col-md-7">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Kuvaus</div>
-                    <div class="panel-body">
-                        ${ohje}
+            <%--            <div class="row">
+                            <c:if test="${tekija != null}">
+                                <div class="col-md-2">Tekija: ${tekija}</div>                
+                            </c:if>
+                            <div class="col-md-2">Lisätty: ${lisaysAika}</div>
+                            <c:if test="${paaraakaAine != null}">
+                                <div class="col-md-2">Pääraaka-aine: ${paaraakaAine}</div>
+                            </c:if>
+                            <div class="col-md-2">Ruokalaji: </div> 
+                        </div>
+            --%>         <div class="row">
+                <div class="col-md-7">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Kuvaus</div>
+                        <div class="panel-body">
+                            ${ohje}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Reseptin tiedot</div>
+                        <div class="panel-body">
+                            <c:if test="${tekija != null}">
+                                <div class="col-md-3">Tekija: ${tekija}</div>
+                            </c:if>
+                            <div class="col-md-3">Lisätty: ${lisaysAika}</div>
+                            <c:if test="${paaraakaAine != null}">
+                                <div class="col-md-3">Pääraaka-aine: ${paaraakaAine}</div>
+                            </c:if>
+                            <div class="col-md-3">Ruokalaji: ${ruokalajit}</div> 
+                        </div>
                     </div>
                 </div>
             </div>

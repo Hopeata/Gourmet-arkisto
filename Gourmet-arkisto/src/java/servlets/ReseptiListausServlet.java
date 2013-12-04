@@ -33,6 +33,7 @@ public class ReseptiListausServlet extends YleisServlet {
         resp.setContentType("text/html;charset=UTF-8");
         req.setAttribute("kayttajatunnus", kayttaja.getTunnus());
         req.setAttribute("onAdmin", onAdminOikeudet(session));
+        req.setAttribute("onVipOikeudet", onVipOikeudet(session));
         List<Ruokalaji> ruokalajit = (List<Ruokalaji>) session.getAttribute("ruokalajit");
         if (ruokalajit == null) {
             ruokalajit = TkResepti.haeRuokalajit();
@@ -50,9 +51,7 @@ public class ReseptiListausServlet extends YleisServlet {
         boolean avaaSivu = false;
         if (reseptinetsintaaction != null) {
             String pikahakusana = req.getParameter("pikahaku");
-            if (req.getParameter("ehdotukset") != null) {
-                reseptit = TkResepti.haeReseptia(pikahakusana, null, null, false);
-            }
+            reseptit = TkResepti.haeReseptia(pikahakusana, null, null, false);
             lisaaSessioon(req, "pikahakusana", pikahakusana);
         } else if (perushakuaction != null) {
             String perushakusana = req.getParameter("perushaku");
