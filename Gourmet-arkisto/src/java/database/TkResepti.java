@@ -31,18 +31,19 @@ public class TkResepti {
 
     // Lisäyslauseet
     private static final String LISAA_RESEPTI = "INSERT INTO resepti (lisaysaika, ohje, "
-            + "kuva_url, kayttaja_id, paaraaka_aine_id) VALUES (?, ?, ?, ?, ?)";
+            + "kuva_url, kayttaja_id, paaraaka_aine_id, on_ehdotus) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String LISAA_RESEPTIN_NIMI = "INSERT INTO reseptinnimi (resepti_id, "
             + "nimi, on_paanimi) VALUES (?, ?, ?)";
     private static final String LISAA_RESEPTIN_RUOKALAJI = "INSERT INTO reseptinruokalaji (ruokalaji_id, "
             + "resepti_id) VALUES (?, ?)";
     // Hakulauseet
     private static final String HAE_RESEPTIT = "SELECT * FROM resepti";
+    private static final String HAE_RESEPTIT_TAI_EHDOTUKSET = HAE_RESEPTIT + " WHERE on_ehdotus = ?";
     private static final String HAE_RESEPTI_IDLLA = HAE_RESEPTIT + " WHERE id = ?";
     private static final String HAE_RESEPTIN_NIMET = "SELECT * FROM reseptinnimi WHERE resepti_id = ?";
     private static final String HAE_RESEPTI_HAKUEHDOILLA = "SELECT * FROM resepti r INNER JOIN reseptinruokalaji rr ON (r.id=rr.resepti_id) "
             + "INNER JOIN reseptinnimi rn ON (r.id = rn.resepti_id) "
-            + "WHERE (LOWER(nimi) LIKE LOWER(?) OR LOWER(ohje) LIKE LOWER(?))";
+            + "WHERE on_ehdotus = ? AND ((LOWER(nimi) LIKE LOWER(?) OR LOWER(ohje) LIKE LOWER(?)))";
     private static final String JARJESTA_RESEPTIT_PVM_MUKAAN = " ORDER BY lisaysaika DESC";
     private static final String HAE_RUOKALAJIT = "SELECT * FROM ruokalaji";
     private static final String HAE_RUOKALAJIT_IDLLA = HAE_RUOKALAJIT + " WHERE id = ?";
@@ -56,6 +57,7 @@ public class TkResepti {
     // Päivityslauseet
     private static final String PAIVITA_RESEPTI = "UPDATE resepti SET lisaysaika = ?, ohje = ?, kuva_url = ?, paaraaka_aine_id = ? WHERE id = ?";
     private static final String PAIVITA_RESEPTIN_PAANIMI = "UPDATE reseptinnimi SET nimi = ? WHERE resepti_id = ? AND on_paanimi = ?";
+    private static final String PAIVITA_EHDOTUS_RESEPTIKSI = "UPDATE resepti SET on_ehdotus = false WHERE id = ?";
 
     private static List<Resepti> muunnaNimettomiksiReseptiOlioiksi(Connection yhteys, ResultSet rs) throws SQLException {
         List<Resepti> reseptit = new ArrayList<Resepti>();
@@ -73,7 +75,7 @@ public class TkResepti {
             List<Ruokalaji> ruokalajit = haeReseptinRuokalajit(yhteys, rs.getInt("id"));
             reseptit.add(new Resepti(rs.getInt("id"),
                     rs.getTimestamp("lisaysaika"), rs.getString("ohje"), rs.getString("kuva_url"),
-                    tekija, paaraakaAine, null, ruokalajit));
+                    tekija, paaraakaAine, null, ruokalajit, rs.getBoolean("on_ehdotus")));
         }
         rs.close();
         return reseptit;
@@ -130,11 +132,12 @@ public class TkResepti {
         }
     }
 
-    public static List<Resepti> haeReseptit() {
+    public static List<Resepti> haeReseptit(boolean onEhdotus) {
         List<Resepti> reseptit = null;
         Connection yhteys = Tietokanta.avaaYhteys();
         try {
-            PreparedStatement kysely = yhteys.prepareStatement(HAE_RESEPTIT + JARJESTA_RESEPTIT_PVM_MUKAAN);
+            PreparedStatement kysely = yhteys.prepareStatement(HAE_RESEPTIT_TAI_EHDOTUKSET + JARJESTA_RESEPTIT_PVM_MUKAAN);
+            kysely.setBoolean(1, onEhdotus);
             ResultSet rs = kysely.executeQuery();
             reseptit = muunnaNimettomiksiReseptiOlioiksi(yhteys, rs);
             kysely.close();
@@ -151,7 +154,7 @@ public class TkResepti {
         }
     }
 
-    public static List<Resepti> haeReseptia(String hakusana, String[] ruokalajit, String[] paaraakaAineet) {
+    public static List<Resepti> haeReseptia(String hakusana, String[] ruokalajit, String[] paaraakaAineet, boolean onEhdotus) {
         List<Resepti> reseptit = new ArrayList<Resepti>();
         HashSet<Integer> reseptinIdt = new HashSet<Integer>();
         Connection yhteys = Tietokanta.avaaYhteys();
@@ -179,8 +182,9 @@ public class TkResepti {
             }
             String haku = HAE_RESEPTI_HAKUEHDOILLA + hakuehdot.toString() + JARJESTA_RESEPTIT_PVM_MUKAAN;
             PreparedStatement kysely = yhteys.prepareStatement(haku);
-            kysely.setString(1, "%" + hakusana + "%");
+            kysely.setBoolean(1, onEhdotus);
             kysely.setString(2, "%" + hakusana + "%");
+            kysely.setString(3, "%" + hakusana + "%");
             int parametrinIndeksi = 3;
             if (ruokalajit != null) {
                 for (String ruokalajiId : ruokalajit) {
@@ -295,6 +299,7 @@ public class TkResepti {
             } else {
                 lisayslause.setInt(5, resepti.getPaaraakaAine().getId());
             }
+            lisayslause.setBoolean(6, resepti.isEhdotus());
             lisayslause.executeUpdate();
             ResultSet vastaus = lisayslause.getGeneratedKeys();
             int id = -1;
@@ -326,6 +331,20 @@ public class TkResepti {
                 Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
                 throw new GourmetException("Yhteyden automatisointi epäonnistui: " + ex.getMessage());
             }
+            Tietokanta.suljeYhteys(yhteys);
+        }
+    }
+
+    public static void pavitaEhdotusReseptiksi(int id) {
+        Connection yhteys = Tietokanta.avaaYhteys();
+        try {
+            PreparedStatement paivityslause = yhteys.prepareStatement(PAIVITA_EHDOTUS_RESEPTIKSI);
+            paivityslause.setInt(1, id);
+            paivityslause.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(TkResepti.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GourmetException("Yhteyden automatisointi epäonnistui: " + ex.getMessage());
+        } finally {
             Tietokanta.suljeYhteys(yhteys);
         }
     }

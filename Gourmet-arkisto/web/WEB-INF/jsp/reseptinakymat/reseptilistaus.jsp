@@ -11,7 +11,7 @@
 <html>
     <body>
         <t:pohja>
-            <h1>Tervetuloa, ${kayttajatunnus}!</h1>
+            <h3>Tervetuloa, ${kayttajatunnus}!</h3>
             <br>
             <div class="panel panel-default">
                 <!-- Default panel contents -->
@@ -54,9 +54,32 @@
                         </div>
                     </form>
                 </div>
+                <c:if test="${onAdmin == true}">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <c:if test="${onAdmin == true}">
+                                <form class="form" role="form" action="" method="POST">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">                                            
+                                            <input type="submit" name="ehdotukset" value="Näytä ehdotukset"> 
+                                            <input type="submit" name="reseptit" value="Näytä lisätyt reseptit">
+                                        </div>                
+                                    </div>
+                                </form>
+                            </c:if>
+                        </div>
+                    </div>
+                </c:if>
                 <br>
                 <br>
-                <div class="panel-heading">Reseptit</div>
+                <c:choose>
+                    <c:when test="${ehdotukset == true}">
+                        <div class="panel-heading">Ehdotukset</div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="panel-heading">Reseptit</div>
+                    </c:otherwise>
+                </c:choose>
                 <!-- Table -->
                 <table class="table table-hover">
                     <thead>

@@ -32,6 +32,7 @@ public class ReseptiListausServlet extends YleisServlet {
         Kayttaja kayttaja = (Kayttaja) session.getAttribute("kirjautunut");
         resp.setContentType("text/html;charset=UTF-8");
         req.setAttribute("kayttajatunnus", kayttaja.getTunnus());
+        req.setAttribute("onAdmin", onAdminOikeudet(session));
         List<Ruokalaji> ruokalajit = (List<Ruokalaji>) session.getAttribute("ruokalajit");
         if (ruokalajit == null) {
             ruokalajit = TkResepti.haeRuokalajit();
@@ -49,7 +50,9 @@ public class ReseptiListausServlet extends YleisServlet {
         boolean avaaSivu = false;
         if (reseptinetsintaaction != null) {
             String pikahakusana = req.getParameter("pikahaku");
-            reseptit = TkResepti.haeReseptia(pikahakusana, null, null);
+            if (req.getParameter("ehdotukset") != null) {
+                reseptit = TkResepti.haeReseptia(pikahakusana, null, null, false);
+            }
             lisaaSessioon(req, "pikahakusana", pikahakusana);
         } else if (perushakuaction != null) {
             String perushakusana = req.getParameter("perushaku");
@@ -63,7 +66,7 @@ public class ReseptiListausServlet extends YleisServlet {
             if (paaraakaAinetulokset != null) {
                 valitutPaaraakaAineet = Arrays.asList(paaraakaAinetulokset);
             }
-            reseptit = TkResepti.haeReseptia(perushakusana, ruokalajitulokset, paaraakaAinetulokset);
+            reseptit = TkResepti.haeReseptia(perushakusana, ruokalajitulokset, paaraakaAinetulokset, false);
             lisaaSessioon(req, "perushakusana", perushakusana);
             for (Ruokalaji ruokalaji : ruokalajit) {
                 if (valitutRuokalajit.contains("" + ruokalaji.getId())) {
@@ -77,7 +80,12 @@ public class ReseptiListausServlet extends YleisServlet {
             }
         } else {
             if (session.getAttribute("reseptit") == null) {
-                reseptit = TkResepti.haeReseptit();
+                if (req.getParameter("ehdotukset") != null) {
+                    reseptit = TkResepti.haeReseptit(true);
+                    req.setAttribute("ehdotukset", true);
+                } else {
+                    reseptit = TkResepti.haeReseptit(false);
+                }
             }
             avaaSivu = true;
         }

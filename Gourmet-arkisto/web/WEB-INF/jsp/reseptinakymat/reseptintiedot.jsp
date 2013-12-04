@@ -33,7 +33,10 @@
             <c:if test="${onAdmin == true}">
                 <form class="form" role="form" action="" method="POST">
                     <div class="form-group">
-                        <div class="col-sm-10">                        
+                        <div class="col-sm-10">
+                            <c:if test="${ehdotus == true}">
+                                <input type="submit" name="lisays" value="Lisää resepti"> 
+                            </c:if> 
                             <input type="submit" name="muokkaus" value="Muokkaa reseptiä"> 
                             <input type="submit" name="poisto" value="Poista resepti">
                         </div>                

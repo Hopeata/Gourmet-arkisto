@@ -23,7 +23,8 @@ public class ReseptinTiedotServlet extends YleisServlet {
         String action = req.getParameter("action");
         if (action != null) {
             Resepti resepti = TkResepti.haeResepti(Integer.parseInt(action));
-            if (req.getParameter("muokkaus") == null && req.getParameter("poisto") == null) {
+            if (req.getParameter("lisays") == null && req.getParameter("muokkaus") == null 
+                    && req.getParameter("poisto") == null) {
                 req.setAttribute("nimi", resepti.getPaanimi());
                 if (resepti.getTekija() != null) {
                     req.setAttribute("tekija", resepti.getTekija().getTunnus());
@@ -35,7 +36,11 @@ public class ReseptinTiedotServlet extends YleisServlet {
                 req.setAttribute("ohje", resepti.getOhje());
                 HttpSession session = req.getSession();
                 req.setAttribute("onAdmin", onAdminOikeudet(session));
+                req.setAttribute("ehdotus", resepti.isEhdotus());
                 avaaSivu("/WEB-INF/jsp/reseptinakymat/reseptintiedot.jsp", req, resp);
+            } else if (req.getParameter("lisays") != null) {
+                TkResepti.pavitaEhdotusReseptiksi(resepti.getId());
+                siirrySivulle("/arkisto/reseptintiedot?action=" + resepti.getId() + "", req, resp);
             } else if (req.getParameter("poisto") != null) {
                 TkResepti.poistaResepti(resepti.getId());
                 siirrySivulle("/arkisto/reseptilistaus", req, resp);

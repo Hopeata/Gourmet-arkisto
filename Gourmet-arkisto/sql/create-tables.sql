@@ -23,7 +23,8 @@ CREATE TABLE resepti (
     ohje varchar not null,
     kuva_url varchar,
     kayttaja_id int references kayttaja(id) ON DELETE SET NULL,
-    paaraaka_aine_id int references paaraaka_aine(id)
+    paaraaka_aine_id int references paaraaka_aine(id),
+    on_ehdotus boolean not null
 );
 
 CREATE TABLE reseptinruokalaji (

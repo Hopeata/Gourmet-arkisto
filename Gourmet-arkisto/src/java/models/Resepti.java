@@ -24,9 +24,10 @@ public class Resepti {
     private PaaraakaAine paaraakaAine;
     private List<ReseptinNimi> nimet;
     private List<Ruokalaji> ruokalajit;
+    private boolean ehdotus;
 
     public Resepti(int id, Timestamp lisaysaika, String ohje, String kuvaUrl,
-            Kayttaja tekija, PaaraakaAine paaraakaAine, List<ReseptinNimi> nimet, List<Ruokalaji> ruokalajit) {
+            Kayttaja tekija, PaaraakaAine paaraakaAine, List<ReseptinNimi> nimet, List<Ruokalaji> ruokalajit, boolean ehdotus) {
         this.id = id;
         this.lisaysaika = lisaysaika;
         this.ohje = ohje;
@@ -35,6 +36,7 @@ public class Resepti {
         this.paaraakaAine = paaraakaAine;
         this.nimet = nimet;
         this.ruokalajit = ruokalajit;
+        this.ehdotus = ehdotus;
     }
 
     public int getId() {
@@ -122,4 +124,9 @@ public class Resepti {
     public void setRuokalajit(List<Ruokalaji> ruokalajit) {
         this.ruokalajit = ruokalajit;
     }
+
+    public boolean isEhdotus() {
+        return ehdotus;
+    }
+    
 }

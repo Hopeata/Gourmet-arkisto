@@ -72,7 +72,7 @@ public class ReseptinLisaysServlet extends YleisServlet {
         if (virheviestit.length() > 0) {
             List<ReseptinNimi> nimet = new ArrayList<ReseptinNimi>();
             nimet.add(new ReseptinNimi(-1, nimi, true));
-            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, null, null, nimet, null);
+            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, null, null, nimet, null, true);
             lisaaVirheViesti(req, virheviestit.toString());
             lisaaSessioon(req, "resepti", resepti);
             siirrySivulle("/arkisto/reseptinlisays", req, resp);
@@ -87,7 +87,12 @@ public class ReseptinLisaysServlet extends YleisServlet {
                     paaraakaAineOlio = paaraakaAine1;
                 }
             }
-            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, null);
+            Resepti resepti;
+            if (tekija.isVipOikeudet()) {
+                resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, null, false);
+            } else {
+                resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, null, true);
+            }
             List<Integer> ruokalajiIdt = new ArrayList<Integer>();
             for (String ruokalajiId : ruokalajit) {
                 ruokalajiIdt.add(Integer.parseInt(ruokalajiId));
@@ -117,7 +122,7 @@ public class ReseptinLisaysServlet extends YleisServlet {
         if (virheviestit.length() > 0) {
             List<ReseptinNimi> nimet = new ArrayList<ReseptinNimi>();
             nimet.add(new ReseptinNimi(resepti.getId(), nimi, true));
-            Resepti virheResepti = new Resepti(resepti.getId(), null, ohje, kuvaUrl, resepti.getTekija(), null, nimet, null);
+            Resepti virheResepti = new Resepti(resepti.getId(), null, ohje, kuvaUrl, resepti.getTekija(), null, nimet, null, resepti.isEhdotus());
             lisaaVirheViesti(req, virheviestit.toString());
             lisaaSessioon(req, "action", "reseptinmuokkaus");
             lisaaSessioon(req, "resepti", virheResepti);
@@ -131,7 +136,7 @@ public class ReseptinLisaysServlet extends YleisServlet {
                     paaraakaAineOlio = paaraakaAine1;
                 }
             }
-            Resepti muokkausresepti = new Resepti(resepti.getId(), null, ohje, kuvaUrl, resepti.getTekija(), paaraakaAineOlio, null, null);
+            Resepti muokkausresepti = new Resepti(resepti.getId(), null, ohje, kuvaUrl, resepti.getTekija(), paaraakaAineOlio, null, null, resepti.isEhdotus());
             List<Integer> ruokalajiIdt = new ArrayList<Integer>();
             for (String ruokalajiId : ruokalajit) {
                 ruokalajiIdt.add(Integer.parseInt(ruokalajiId));
