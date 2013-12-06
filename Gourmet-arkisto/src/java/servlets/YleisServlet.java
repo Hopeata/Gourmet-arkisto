@@ -40,7 +40,7 @@ public class YleisServlet extends HttpServlet {
     }
 
     public static void lisaaVirheViesti(HttpServletRequest request, String viesti) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         session.setAttribute("virheViesti", viesti);
     }
 

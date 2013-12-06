@@ -15,7 +15,6 @@ import java.util.List;
 public class Resepti {
 
     private static SimpleDateFormat SDF = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-    
     private int id;
     private Timestamp lisaysaika;
     private String ohje;
@@ -50,7 +49,7 @@ public class Resepti {
     public Timestamp getLisaysaika() {
         return lisaysaika;
     }
-    
+
     public String getLisaysaikaFormatoitu() {
         return SDF.format(lisaysaika);
     }
@@ -95,6 +94,36 @@ public class Resepti {
         return nimet;
     }
 
+    public String getValitutRuokalajit() {
+        StringBuilder valitutRuokalajit = new StringBuilder();
+        for (Ruokalaji ruokalaji : ruokalajit) {
+            valitutRuokalajit.append("," + ruokalaji.getId() + ",");
+        }
+        return valitutRuokalajit.toString();
+    }
+
+    public String getValittujenRuokalajienNimet() {
+        StringBuilder ruokalajiNimet = new StringBuilder();
+        for (Ruokalaji ruokalaji : ruokalajit) {
+            if (ruokalajiNimet.length() > 0) {
+                ruokalajiNimet.append(", ");
+            }
+            ruokalajiNimet.append(ruokalaji.getRuokalaji());
+        }
+        return ruokalajiNimet.toString();
+    }
+
+    public String getMuutNimet() {
+        StringBuilder muutNimet = new StringBuilder();
+        for (ReseptinNimi nimi : nimet) {
+            if (muutNimet.length() > 0) {
+                muutNimet.append(", ");
+            }
+            muutNimet.append(nimi.getNimi());
+        }
+        return muutNimet.toString();
+    }
+
     public void setNimet(List<ReseptinNimi> nimet) {
         this.nimet = nimet;
     }
@@ -128,5 +157,4 @@ public class Resepti {
     public boolean isEhdotus() {
         return ehdotus;
     }
-    
 }

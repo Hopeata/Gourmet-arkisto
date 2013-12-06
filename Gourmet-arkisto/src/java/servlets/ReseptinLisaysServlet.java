@@ -60,6 +60,25 @@ public class ReseptinLisaysServlet extends YleisServlet {
         String paaraakaAine = req.getParameter("paaraakaAineRadio");
         String ohje = req.getParameter("ohje");
 
+        int paaraakaAineId = Integer.parseInt(paaraakaAine);
+        PaaraakaAine paaraakaAineOlio = null;
+        List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
+        for (PaaraakaAine paaraakaAine1 : paaraakaAineet) {
+            if (paaraakaAine1.getId() == paaraakaAineId) {
+                paaraakaAineOlio = paaraakaAine1;
+            }
+        }
+        List<Ruokalaji> ruokalajiOliot = TkResepti.haeRuokalajit();
+        List<Ruokalaji> valitutRuokalajit = new ArrayList<Ruokalaji>();
+        //       List<Integer> ruokalajiIdt = new ArrayList<Integer>();
+        for (String ruokalajiId : ruokalajit) {
+            for (Ruokalaji ruokalajiOlio : ruokalajiOliot) {
+                if (ruokalajiOlio.getId() == Integer.parseInt(ruokalajiId)) {
+                    valitutRuokalajit.add(ruokalajiOlio);
+                }
+            }
+
+        }
         StringBuilder virheviestit = new StringBuilder();
         if (nimi == null || nimi.equals("")) {
             virheviestit.append("Reseptin nimi puuttuu! <br/>");
@@ -73,32 +92,20 @@ public class ReseptinLisaysServlet extends YleisServlet {
         if (virheviestit.length() > 0) {
             List<ReseptinNimi> nimet = new ArrayList<ReseptinNimi>();
             nimet.add(new ReseptinNimi(-1, nimi, true));
-            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, null, null, nimet, null, true);
+            Resepti resepti = new Resepti(-1, null, ohje, kuvaUrl, null, paaraakaAineOlio, nimet, valitutRuokalajit, true);
             lisaaVirheViesti(req, virheviestit.toString());
             lisaaSessioon(req, "resepti", resepti);
             siirrySivulle("/arkisto/reseptinlisays", req, resp);
         } else {
             HttpSession session = req.getSession();
             Kayttaja tekija = (Kayttaja) session.getAttribute("kirjautunut");
-            int paaraakaAineId = Integer.parseInt(paaraakaAine);
-            PaaraakaAine paaraakaAineOlio = null;
-            List<PaaraakaAine> paaraakaAineet = TkResepti.haePaaraakaAineet();
-            for (PaaraakaAine paaraakaAine1 : paaraakaAineet) {
-                if (paaraakaAine1.getId() == paaraakaAineId) {
-                    paaraakaAineOlio = paaraakaAine1;
-                }
-            }
             Resepti resepti;
             if (tekija.isVipOikeudet()) {
-                resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, null, false);
+                resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, valitutRuokalajit, false);
             } else {
-                resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, null, true);
+                resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, valitutRuokalajit, true);
             }
-            List<Integer> ruokalajiIdt = new ArrayList<Integer>();
-            for (String ruokalajiId : ruokalajit) {
-                ruokalajiIdt.add(Integer.parseInt(ruokalajiId));
-            }
-            TkResepti.lisaaResepti(resepti, ruokalajiIdt, nimi);
+            TkResepti.lisaaResepti(resepti, nimi);
             siirrySivulle("/arkisto/reseptilistaus", req, resp);
         }
     }

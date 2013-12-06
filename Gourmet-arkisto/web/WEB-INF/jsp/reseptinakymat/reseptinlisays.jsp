@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <!DOCTYPE html>
 <html>
     <body>
@@ -20,10 +22,6 @@
                         <h1>Ehdota reseptiä!</h1>
                     </c:otherwise>
                 </c:choose>
-                <c:if test="${virheViesti != null}">
-                    <div class="alert alert-danger">${virheViesti}</div>
-                    <c:remove var="virheViesti" scope="session"/>
-                </c:if>
                 <form class="form-horizontal" role="form" action="" method="POST">
                     <c:choose>
                         <c:when test="${action == 'reseptinmuokkaus'}">
@@ -52,19 +50,20 @@
                         <label for="checkbox" class="col-sm-2 control-label">Ruokalaji:* </label>
                         <c:forEach var="ruokalaji" items="${ruokalajit}">                    
                             <label class="checkbox-inline">
-                                <input type="checkbox" name="ruokalajiCheckbox" value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
+                                <input type="checkbox" name="ruokalajiCheckbox" <c:if test="${fn:contains(resepti.valitutRuokalajit, ruokalaji.vertailuId)}"> checked </c:if>
+                                       value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
                             </label>
-                        </c:forEach>
+                        </c:forEach>                        
                     </div>
                     <div class="form-group">
                         <label for="radio" class="col-sm-2 control-label">Pääraaka-aine: </label>
                         <label class="radio-inline">
-                            <input type="radio" name="paaraakaAineRadio" id="eivalintaa" value="-1" checked>Ei valintaa
-                        </label>
+                            <input type="radio" name="paaraakaAineRadio" id="eivalintaa" value="-1" <c:if test="${resepti == null || resepti.paaraakaAine == null}"> checked </c:if> >Ei valintaa
+                            </label>
                         <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
                             <label class="radio-inline">
-                                <input type="radio" name="paaraakaAineRadio" id="<c:out value="${paaraakaAine.id}"/>" value="<c:out value="${paaraakaAine.id}"/>"><c:out value="${paaraakaAine.paaraakaAine}"/>
-                            </label>
+                                <input type="radio" name="paaraakaAineRadio" id="<c:out value="${paaraakaAine.id}"/>" value="<c:out value="${paaraakaAine.id}"/>" <c:if test="${resepti != null && resepti.paaraakaAine != null && resepti.paaraakaAine.id == paaraakaAine.id}"> checked </c:if>><c:out value="${paaraakaAine.paaraakaAine}"/>
+                                </label>
                         </c:forEach>
                     </div>
                     <div class="form-group">

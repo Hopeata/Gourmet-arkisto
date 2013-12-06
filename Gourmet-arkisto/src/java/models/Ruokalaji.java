@@ -34,4 +34,8 @@ public class Ruokalaji {
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
+    
+    public String getVertailuId() {
+        return "," + id + ",";
+    }
 }

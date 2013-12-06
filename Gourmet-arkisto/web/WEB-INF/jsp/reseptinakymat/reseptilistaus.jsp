@@ -31,7 +31,7 @@
                                 <c:forEach var="ruokalaji" items="${ruokalajit}">                    
                                     <label class="checkbox-inline">
                                         <input name="ruokalajiCheckbox" type="checkbox" id="ruokalajiCheckbox" <c:if test="${ruokalaji.checked}">checked="checked"</c:if> value="<c:out value="${ruokalaji.id}"/>"><c:out value="${ruokalaji.ruokalaji}"/>
-                                    </label>
+                                        </label>
                                 </c:forEach>
                                 <c:remove var="ruokalajit" scope="session"/>
                             </div>
@@ -42,7 +42,7 @@
                                 <c:forEach var="paaraakaAine" items="${paaraakaAineet}">                    
                                     <label class="checkbox-inline">
                                         <input name="paaraakaAineCheckbox" type="checkbox" id="paaraakaAineCheckbox" <c:if test="${paaraakaAine.checked}">checked="checked"</c:if> value="<c:out value="${paaraakaAine.id}"/>"><c:out value="${paaraakaAine.paaraakaAine}"/>
-                                    </label>
+                                        </label>
                                 </c:forEach>
                                 <c:remove var="paaraakaAineet" scope="session"/>
                             </div>
@@ -81,18 +81,14 @@
                             <th><a>Nimi</a></th>
                             <th>Ruokalaji</th>
                             <th>Pääraaka-aine</th>
-                            <th>Lisätty</th>
+                            <th>Viimeksi muokattu</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="resepti" items="${reseptit}">
                             <tr>
-                                <td><a href="${pageContext.request.contextPath}/arkisto/reseptintiedot?action=<c:out value="${resepti.id}"/>"><c:out value="${resepti.paanimi}"/></a></td>
-                                <td>
-                                    <c:forEach var="ruokalaji" items="${resepti.ruokalajit}">
-                                        <c:out value="${ruokalaji.ruokalaji}"/>
-                                    </c:forEach>
-                                </td>
+                                <td><a href="${pageContext.request.contextPath}/arkisto/reseptintiedot?action=<c:out value="${resepti.id}"/>" title="${resepti.muutNimet}"><c:out value="${resepti.paanimi}"/></a></td>
+                                <td><c:out value="${resepti.valittujenRuokalajienNimet}"/></td>
                                 <td><c:out value="${resepti.paaraakaAineNimi}"/></td>
                                 <td><c:out value="${resepti.lisaysaikaFormatoitu}"/></td>
                             </tr>

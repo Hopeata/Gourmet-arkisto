@@ -14,6 +14,10 @@
             <param-value>UTF-8</param-value>
         </init-param>
     </filter>
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>filters.AdminFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>KirjautumisFilter</filter-name>
         <url-pattern>/arkisto/*</url-pattern>
@@ -22,6 +26,10 @@
         <filter-name>MerkistoFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/arkisto/kayttajalistaus</url-pattern>
+    </filter-mapping>    
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/vikatila</location>

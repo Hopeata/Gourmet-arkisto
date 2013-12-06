@@ -37,14 +37,16 @@
             </ul>
             <li><a href="${pageContext.request.contextPath}/arkisto/reseptilistaus">Pääsivu</a></li>
             <c:choose>
-                <c:when test="${onVipOikeudet == true}">
+                <c:when test="${kirjautunut.vipOikeudet}">
                     <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Lisää resepti</a></li>
                 </c:when>
                 <c:otherwise>
                     <li><a href="${pageContext.request.contextPath}/arkisto/reseptinlisays">Ehdota reseptiä</a></li>                           </c:otherwise>
             </c:choose>
             <li><a href="${pageContext.request.contextPath}/arkisto/kayttajantiedot">Omat tiedot</a></li>
-            <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
+            <c:if test="${ kirjautunut.adminOikeudet }">
+                <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
+            </c:if>                
             <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/arkisto/reseptilistaus" name="pikahakuform" id="pikahakuform" role="search">
                 <input name="reseptinetsintaaction" type="hidden" id="reseptinetsintaaction" value="pikahaku">
                 <div class="form-group">
@@ -54,6 +56,10 @@
                 <button type="submit" name="pikahakubtn" id="pikahakubtn" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Hae</button>
             </form>
         </ul>
+        <c:if test="${virheViesti != null}">
+            <div class="alert alert-danger">${virheViesti}</div>
+            <c:remove var="virheViesti" scope="session"/>
+        </c:if>
         <jsp:doBody/>
     </body>
 </html>
