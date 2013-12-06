@@ -104,6 +104,7 @@ public class ReseptinLisaysServlet extends YleisServlet {
                 resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, valitutRuokalajit, false);
             } else {
                 resepti = new Resepti(-1, null, ohje, kuvaUrl, tekija, paaraakaAineOlio, null, valitutRuokalajit, true);
+                lisaaOnnistumisViesti(req, "Reseptiehdotuksesi on lähetetty ylläpitäjälle hyväksyttäväksi!");
             }
             TkResepti.lisaaResepti(resepti, nimi);
             siirrySivulle("/arkisto/reseptilistaus", req, resp);

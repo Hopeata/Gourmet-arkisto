@@ -65,7 +65,7 @@ public class KayttajanLisaysServlet extends YleisServlet {
 
             Kayttaja uusiKayttaja = new Kayttaja(-1, tunnus, sahkoposti, false, false);
             TkKayttaja.lisaaKayttaja(uusiKayttaja, salasana);
-            lisaaVirheViesti(req, "Käyttäjätilisi on aktivoitu!");
+            lisaaOnnistumisViesti(req, "Käyttäjätilisi on aktivoitu!");
             siirrySivulle("/kirjautuminen", req, resp);
         }
 

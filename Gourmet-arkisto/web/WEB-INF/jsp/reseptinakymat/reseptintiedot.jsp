@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <input type="text" name="nimenlisays" class="form-control" id="nimenlisays" placeholder="Add">
                 </div>
-                <button type="submit" name="nimenlisaysbtn" id="nimenlisaysbtn" class="btn btn-default">Lisää</button>
+                <button type="submit" name="nimenlisaysbtn" id="nimenlisaysbtn" class="btn btn-default">Lisää nimi</button>
             </form>
             <br/>
             <br/>

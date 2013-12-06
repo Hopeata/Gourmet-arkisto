@@ -43,6 +43,11 @@ public class YleisServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("virheViesti", viesti);
     }
+    
+    public static void lisaaOnnistumisViesti(HttpServletRequest request, String viesti) {
+        HttpSession session = request.getSession();
+        session.setAttribute("onnistumisViesti", viesti);        
+    }
 
     public static void lisaaSessioon(HttpServletRequest request, String avain, String arvo) {
         HttpSession session = request.getSession(false);

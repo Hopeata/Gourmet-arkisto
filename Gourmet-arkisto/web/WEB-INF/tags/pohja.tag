@@ -60,6 +60,10 @@
             <div class="alert alert-danger">${virheViesti}</div>
             <c:remove var="virheViesti" scope="session"/>
         </c:if>
+        <c:if test="${onnistumisViesti != null}">
+            <div class="alert alert-success">${onnistumisViesti}</div>
+            <c:remove var="onnistumisViesti" scope="session"/>
+        </c:if>
         <jsp:doBody/>
     </body>
 </html>

@@ -22,6 +22,10 @@
                 <div class="alert alert-danger">${virheViesti}</div>
                 <c:remove var="virheViesti" scope="session"/>
             </c:if>
+            <c:if test="${onnistumisViesti != null}">
+                <div class="alert alert-success">${onnistumisViesti}</div>
+                <c:remove var="onnistumisViesti" scope="session"/>
+            </c:if>            
             <form class="form-horizontal" role="form" action="" method="POST">
                 <input name="action" type="hidden" id="action" value="login">
                 <div class="form-group">
