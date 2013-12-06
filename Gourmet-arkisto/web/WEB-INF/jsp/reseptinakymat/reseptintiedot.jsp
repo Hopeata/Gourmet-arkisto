@@ -30,6 +30,11 @@
             </form>
             <br/>
             <br/>
+            <c:if test="${resepti.kuvaUrl != null && resepti.kuvaUrl != ''}">
+                <img src="${resepti.kuvaUrl}" alt="${resepti.paanimi}"/>
+                <br/>
+                <br/>
+            </c:if>
             <div class="row">
                 <div class="col-md-7">
                     <div class="panel panel-default">

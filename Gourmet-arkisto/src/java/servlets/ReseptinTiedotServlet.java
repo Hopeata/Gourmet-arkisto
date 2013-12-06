@@ -4,7 +4,6 @@
  */
 package servlets;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import database.TkResepti;
 import java.io.IOException;
 import javax.servlet.ServletException;
