@@ -9,7 +9,7 @@ package models;
  * @author Valeria
  */
 public class ReseptinNimi {
-    
+
     private int reseptinId;
     private String nimi;
     private boolean onPaanimi;
@@ -43,6 +43,4 @@ public class ReseptinNimi {
     public void setOnPaanimi(boolean onPaanimi) {
         this.onPaanimi = onPaanimi;
     }
-  
-    
 }

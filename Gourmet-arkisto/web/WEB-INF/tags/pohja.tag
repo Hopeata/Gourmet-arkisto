@@ -10,7 +10,7 @@
 <%--@attribute name="Gourmet-arkisto"--%>
 <!DOCTYPE html>
 <html>
-    <head>        
+    <head>
         <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/bootstrap-theme.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet">
@@ -47,7 +47,7 @@
             <c:if test="${ kirjautunut.adminOikeudet }">
                 <li><a href="${pageContext.request.contextPath}/arkisto/kayttajalistaus">Käyttäjät</a></li>
             </c:if>                
-            <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/arkisto/reseptilistaus" name="pikahakuform" id="pikahakuform" role="search">
+                <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/arkisto/reseptilistaus" name="pikahakuform" id="pikahakuform" role="search" method="POST">
                 <input name="reseptinetsintaaction" type="hidden" id="reseptinetsintaaction" value="pikahaku">
                 <div class="form-group">
                     <input type="text" name="pikahaku" class="form-control" id="pikahaku" value="${pikahakusana}" placeholder="Search">

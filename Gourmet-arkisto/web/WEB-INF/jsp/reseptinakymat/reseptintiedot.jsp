@@ -20,7 +20,7 @@
                     </div>
                 </c:if> 
             </c:forEach>
-            <form class="form-inline" name="nimenlisaysform" id="nimenlisaysform">
+            <form class="form-inline" name="nimenlisaysform" id="nimenlisaysform" role="form" action="" method="POST">
                 <input name="nimenlisaysaction" type="hidden" id="nimenlisaysaction" value="nimenlisays">
                 <input name="action" type="hidden" id="action" value="${resepti.id}">
                 <div class="form-group">
@@ -65,7 +65,7 @@
                     <div class="form-group">
                         <div class="col-sm-10">
                             <c:if test="${ehdotus == true}">
-                                <input type="submit" name="lisays" value="Lisää resepti"> 
+                                <input type="submit" name="lisays" value="Hyväksy reseptiehdotus"> 
                             </c:if> 
                             <input type="submit" name="muokkaus" value="Muokkaa reseptiä"> 
                             <input type="submit" name="poisto" value="Poista resepti">
